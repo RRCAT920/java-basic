@@ -42,23 +42,5 @@ public class Goods implements Comparable<Goods>{
                 ", price=" + price +
                 '}';
     }
-
-
-    public void testGithub() {
-        System.out.println("github");
-    }
-
-    public void emm() {
-        System.out.println("hello");
-    }
-
-    public void weird() {
-
-    }
-
-    public void weirdo() {
-
-    }
 }
 
-// a test for account

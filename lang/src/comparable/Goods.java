@@ -47,6 +47,10 @@ public class Goods implements Comparable<Goods>{
     public void testGithub() {
         System.out.println("github");
     }
+
+    public void emm() {
+
+    }
 }
 
 // a test for account

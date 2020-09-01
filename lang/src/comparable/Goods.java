@@ -55,6 +55,10 @@ public class Goods implements Comparable<Goods>{
     public void weird() {
 
     }
+
+    public void weirdo() {
+
+    }
 }
 
 // a test for account

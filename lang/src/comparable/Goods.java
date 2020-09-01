@@ -51,6 +51,10 @@ public class Goods implements Comparable<Goods>{
     public void emm() {
         System.out.println("hello");
     }
+
+    public void weird() {
+
+    }
 }
 
 // a test for account

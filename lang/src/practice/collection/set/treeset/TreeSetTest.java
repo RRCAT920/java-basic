@@ -39,22 +39,13 @@ public class TreeSetTest {
                     var date1 = ((Employee) o1).getBirthday();
                     var date2 = ((Employee) o2).getBirthday();
 
-                    int year1 = date1.getYear();
-                    int year2 = date2.getYear();
+                    int diffYear = date1.getYear() - date2.getYear();
+                    if (diffYear != 0) return diffYear;
 
-                    if (year1 == year2) {
-                        int month1 = date1.getMonth();
-                        int month2 = date2.getMonth();
+                    int diffMonth = date1.getMonth() - date2.getMonth();
+                    if (diffMonth != 0) return diffMonth;
 
-                        if (month1 == month2) {
-                            int day1 = date1.getDay();
-                            int day2 = date2.getDay();
-
-                            return day1 - day2;
-                        }
-                        return month1 - month2;
-                    }
-                    return year1 - year2;
+                    return date1.getDay() - date2.getDay();
                 }
                 throw new RuntimeException("类型错误");
             }

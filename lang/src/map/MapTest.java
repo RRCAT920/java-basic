@@ -2,9 +2,7 @@ package map;
 
 import org.junit.Test;
 
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author huzihao
@@ -93,5 +91,68 @@ public class MapTest {
             var entry = (Map.Entry) entryItor.next();
             System.out.println(entry.getKey() + "=" + entry.getValue());
         }
+    }
+
+    /**
+     * <h3>TreeMap</h3>
+     * <ol>
+     *     <li>key的类型必须相同</li>
+     *     <li>按key自动排序</li>
+     *     <li>底层用 红黑树🌈👋🌲 实现</li>
+     * </ol>
+     */
+    @Test
+    public void TreeMapWithComparable() {
+        var treeMap = new TreeMap();
+
+        treeMap.put("B", 2);
+        treeMap.put("C", 3);
+        treeMap.put("F", 4);
+        treeMap.put("A", 1);
+
+        assert "{A=1, B=2, C=3, F=4}".equals(treeMap.toString());
+    }
+
+    @Test
+    public void TreeMapWithComparator() {
+        /*
+          含有属性name和age的User类，重写toString()方法
+         */
+        class User {
+            String name;
+            int age;
+
+            public User(String name, int age) {
+                this.name = name;
+                this.age = age;
+            }
+
+            /**
+             * @return "{value of name,value of age}"
+             */
+            @Override
+            public String toString() {
+                return "{" + name + "," + age + "}";
+            }
+        }
+
+        var ageComparator = new Comparator() {
+            @Override
+            public int compare(Object o1, Object o2) {
+                if (o1 instanceof User && o2 instanceof User) {
+                    return ((User) o1).age - ((User) o2).age;
+                }
+                throw new RuntimeException("类型不匹配");
+            }
+        };
+
+        var treeMap = new TreeMap(ageComparator);
+
+        treeMap.put(new User("张三", 112), 72);
+        treeMap.put(new User("李四", 16), 72);
+        treeMap.put(new User("王五", 332), 72);
+        treeMap.put(new User("刘六", 76), 72);
+
+        assert "{{李四,16}=72, {刘六,76}=72, {张三,112}=72, {王五,332}=72}".equals(treeMap.toString());
     }
 }

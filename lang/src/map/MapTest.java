@@ -2,6 +2,8 @@ package map;
 
 import org.junit.Test;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -154,5 +156,20 @@ public class MapTest {
         treeMap.put(new User("刘六", 76), 72);
 
         assert "{{李四,16}=72, {刘六,76}=72, {张三,112}=72, {王五,332}=72}".equals(treeMap.toString());
+    }
+
+    @Test
+    public void testForProperties() {
+        var properties = new Properties();
+
+        try (var fistream = new FileInputStream("jdbc.properties")) {
+            properties.load(fistream);
+
+            assert "Tom".equals(properties.getProperty("name"));
+            assert "1234567".equals(properties.getProperty("password"));
+        } catch (IOException e) {
+            // template code
+            e.printStackTrace();
+        }
     }
 }

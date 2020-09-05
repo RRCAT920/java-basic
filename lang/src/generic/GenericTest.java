@@ -13,6 +13,7 @@ public class GenericTest {
      * 泛型：定义类、接口时通过一个标识表示属性的类型、返回值的类型，参数的类型，这个类型参数在使用时确定✅。
      * （默认类型参数是java.lang.Object，类型参数必须是类，不能是基本数据类型）
      */
+    @SuppressWarnings({"unchecked", "rawtypes"})
     @Test
     public void genericOverview() {
         var arrayList = new ArrayList();

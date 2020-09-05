@@ -204,7 +204,7 @@ class DAO<E> {
     }
 
     public void update(String id, E entity) {
-        if (map.containsKey(id)) map.put(id, entity);
+        map.putIfAbsent(id, entity);
     }
 
     public List<E> list() {

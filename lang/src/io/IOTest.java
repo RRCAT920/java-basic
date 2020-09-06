@@ -122,4 +122,20 @@ public class IOTest {
         }
         dir.delete(); // suppress warning
     }
+
+    /**
+     * File类提供了两个文件过滤器方法<p>
+     * public String[] list(FilenameFilter filter)<p>
+     * public File[] listFiles(FileFilter filter)
+     */
+    @Test
+    public void test3(){
+        var srcFile = new File(".");
+        var names = srcFile.list((dir, name) ->
+                name.endsWith(".jpg") || name.endsWith(".jpeg"));
+
+        for (var name : names) {
+            System.out.println(name);
+        }
+    }
 }

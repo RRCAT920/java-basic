@@ -28,6 +28,7 @@ public class GenericTest {
             try {
                 // 导致强转不安全🔐
                 int value = (Integer) o;
+                System.out.println(value);
             } catch (ClassCastException e) {
                 hasClassCastException = true;
             }
@@ -46,7 +47,7 @@ public class GenericTest {
         numbers.add(3);
 
         for (var number : numbers) {
-
+            System.out.println(number);
         }
     }
 
@@ -57,12 +58,11 @@ public class GenericTest {
     public void typeInfer() {
         ArrayList<Integer> list = new ArrayList<>();
 
-        TreeSet<Integer> treeSet = new TreeSet<>(new Comparator<>() {
-            @Override
-            public int compare(Integer o1, Integer o2) {
-                return 0;
-            }
-        });
+        TreeSet<Integer> treeSet = new TreeSet<>((o1, o2) -> 0);
+
+        System.out.println(list);
+
+        System.out.println(treeSet);
     }
 
     /**
@@ -207,8 +207,8 @@ public class GenericTest {
     @Test
     public void car() {
         class Car {
-            String name;
-            int speed;
+            final String name;
+            final int speed;
 
             public Car(String name, int speed) {
                 this.name = name;
@@ -339,7 +339,7 @@ public class GenericTest {
     @Test
     public void testNews() {
         class News {
-            String title;
+            final String title;
             String author;
             String content;
             String type;

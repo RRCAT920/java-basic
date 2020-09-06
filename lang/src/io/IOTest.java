@@ -432,4 +432,9 @@ public class IOTest {
             }
         }
     }
+
+    @Test
+    public void teachRRCAT() {
+        System.out.println("容蓉小猫咪🐈");
+    }
 }

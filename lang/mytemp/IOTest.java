@@ -24,7 +24,6 @@ import java.io.PrintStream;
 import java.io.RandomAccessFile;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
-import java.util.Scanner;
 
 import io.record.Person;
 
@@ -497,6 +496,7 @@ public class IOTest {
         }
 
         osw.close();
+        ;
         isr.close();
     }
 
@@ -524,7 +524,11 @@ public class IOTest {
     }
 
     public static void main(String[] args) {
-        new IOTest().practice();
+        var str = MyInput.readString();
+        System.out.println(str);
+
+        var number = MyInput.nextInt();
+        System.out.println(number);
     }
 
     /**
@@ -1077,7 +1081,6 @@ public class IOTest {
         var destFile = new File("mytemp");
         var srcFile = new File("src/io");
 
-        destFile.mkdir();
         copyToDirectory(srcFile, destFile, ".java");
     }
 
@@ -1088,23 +1091,21 @@ public class IOTest {
                 var name = file.getName();
                 if (file.isDirectory()) copyToDirectory(file, dest, pattern);
                 else if (name.endsWith(pattern)) {
-                    var destFile = new File(dest, name);
-                    try {
-                        destFile.createNewFile();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    copyFile(file, destFile);
+                    copyFile(file, dest);
                 }
             }
         }
     }
 
     private void copyFile(File src, File dest) {
+        dest.mkdir();
+        var file = new File(dest, src.getName());
+
         try (var fileReader = new FileReader(src);
-             var fileWriter = new FileWriter(dest);
+             var fileWriter = new FileWriter(file);
              var bufferedReader = new BufferedReader(fileReader);
              var bufferedWriter = new BufferedWriter(fileWriter)) {
+            file.createNewFile();
 
             String str;
             while (null != (str = bufferedReader.readLine())) {
@@ -1115,389 +1116,84 @@ public class IOTest {
             e.printStackTrace();
         }
     }
-
     /**
      * 13. 列出D盘下的所有文件，子目录中的文件，子目录的子目录都要列出，依次类推，总之D盘下所有的文件都要输出（50分）
      * 在列出的时候判断是否子文件夹（10分）
      * 若不是子文件夹直接输出文件名（20分）
      * 若是子文件夹使用递归的形式继续输出子目录中的文件（20分）
      */
-    @Test
-    public void testListAllFiles() {
-        listFilesOf(new File("src"));
-    }
-
-    private static void listFilesOf(File dir) {
-        for (var file : dir.listFiles()) {
-            if (file.isDirectory()) listFilesOf(file);
-            else System.out.println(file);
-        }
-    }
-
     /**
      * 14. 先将“欢迎您来北京学习!”写入到文件”hello.txt”中，再读取该文件中的内容。
      */
-    @Test
-    public void rw() {
-        var file = new File("hello.txt");
-
-        try (var fileWriter = new FileWriter(file);
-             var fileReader = new FileReader(file);
-             var bufferedWriter = new BufferedWriter(fileWriter);
-             var bufferedReader = new BufferedReader(fileReader);) {
-            bufferedWriter.write("欢迎您来北京学习!");
-            bufferedWriter.flush();
-
-            String str;
-            while (null != (str = bufferedReader.readLine())) {
-                System.out.println(str);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     /**
      * 15. 如果准备读取一个文件的内容，应当使用FileInputStream流还是FileOutputStream流？
      */
-    @Test
-    public void test() {
-        try (var fis = new FileInputStream("hello.txt");
-             var isr = new InputStreamReader(fis, StandardCharsets.UTF_8)) {
-            var chars = new char[1024];
-            int length;
-            while (-1 != (length = isr.read(chars))) {
-                var str = new String(chars, 0, length);
-                System.out.print(str);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     /**
      * 16. 编写一个应用程序，将用户从键盘输入的10个整数存入文件，再顺序读出。
      */
-    @Test
-    public void read10Int() {
-        var file = new File("10.txt");
-        try (var fos = new FileOutputStream(file);
-             var fis = new FileInputStream(file);
-             var dos = new DataOutputStream(fos);
-             var dis = new DataInputStream(fis);) {
-            for (int i = 0; i < 10; i++) {
-                dos.writeInt(i);
-            }
-            dos.flush();
-
-            for (int i = 0; i < 10; i++) {
-                int rs = dis.readInt();
-                System.out.println(rs);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     /**
      * 17. BufferedReader流能直接指向一个文件对象吗？
      */
-    @Test
-    public void brCant() {
-        // java: 不兼容的类型: java.io.File无法转换为java.io.Reader
-//        var br = new BufferedReader(new File("can't.txt"));
-    }
-
     /**
      * 18. 列出D盘下的所有文件，子目录中的文件，子目录的子目录都要列出，依次类推，总之D盘下所有的文件都要输出。
      */
-    @Test
-    public void testList() {
-        listOf(new File("src/collection"));
-    }
-
-    private void listOf(File dir) {
-        for (var file : dir.listFiles()) {
-            if (file.isDirectory()) listOf(file);
-            else System.out.println(file);
-        }
-    }
-
     /**
      * 19. 编写程序向文本文件中写入自己的信息，格式为：姓名：XXX 性别：X 年龄：XX 班级：XXX，
      * 将该信息读出后显示的屏幕上后把文件删除。
      */
-    @Test
-    public void readInfoAndDelete() {
-        var file = new File("info.txt");
-        try (var fr = new FileReader(file);
-            var br = new BufferedReader(fr)) {
-            String str;
-            while (null != (str = br.readLine())) {
-                System.out.println(str);
-            }
-            file.delete();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     /**
      * 20. 用缓冲字节流实现文件复制的功能
      * 首先判断d盘是否存在a.txt文件。
      * 若不存在则创建a.txt文件，然后把a.txt文件复制成acopy.txt
      */
-    @Test
-    public void bufferedOutputStream() {
-        var srcFile = new File("a.txt");
-        var destFile = new File("acopy.txt");
-
-        if (!srcFile.exists()) {
-            try {
-                srcFile.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        try (var fos = new FileOutputStream(destFile);
-             var fis = new FileInputStream(srcFile);
-             var bos = new BufferedOutputStream(fos);
-             var bis = new BufferedInputStream(fis)) {
-            var buffer = new byte[1024];
-            int length;
-
-            while (-1 != (length = bis.read(buffer))) {
-                bos.write(buffer, 0, length);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     /**
      * 21. 通过Io流实现MP3文件创建和复印功能
      * 判断d:/歌曲.mp3文件是否存在
      * 若不存在则创建d:/歌曲.mp3文件，创建完成后复制到 e:/歌曲.mp3
      */
-    @Test
-    public void copyMP3() {
-        var mp3 = new File("歌曲.mp3");
-
-        if (!mp3.exists()) {
-            try {
-                mp3.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        var destFile = new File("歌曲-copy.mp3");
-        try (var fis = new FileInputStream(mp3);
-             var fos = new FileOutputStream(destFile);
-             var bis = new BufferedInputStream(fis);
-             var bos = new BufferedOutputStream(fos)) {
-            var bytes = new byte[1024];
-            int length;
-            while (-1 != (length = bis.read(bytes))) {
-                bos.write(bytes, 0, length);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     /**
      * 22. 用（字节流）读取一张图片，读进来之后再输出到另一个文件中。
      */
-    @Test
-    public void readAndWrite() {
-        var srcFile = new File("Luffy.jpg");
-        var destFile = new File("Lucy1.jpg");
-
-        try (var fis = new FileInputStream(srcFile);
-             var fos = new FileOutputStream(destFile);
-             var bis = new BufferedInputStream(fis);
-             var bos = new BufferedOutputStream(fos)) {
-            var bytes = new byte[1024];
-            int length;
-            while (-1 != (length = bis.read(bytes))) {
-                bos.write(bytes);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     /**
      * 23. （字符流）读取一个文本文件，每行都追加一个“好”，在文件结尾再追加“完毕”。
      */
-    @Test
-    public void charsReader() {
-        var srcFile = new File("dbcp.txt");
-        var destFile = new File("dbcp-append.txt");
-
-        try (var fr = new FileReader(srcFile);
-             var fw = new FileWriter(destFile);
-             var br = new BufferedReader(fr);
-             var bw = new BufferedWriter(fw)) {
-            String str;
-            while (null != (str = br.readLine())) {
-                bw.write(str);
-                bw.write("好");
-                bw.newLine();
-            }
-            bw.write("完毕");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     /**
-     * 24. 使用输入、输出流将一个文本文件的内容按行读出，每读出一行就顺序添加行号，并写入到另一个文件中。
+     * 24. 使用Java的输入、输出流将一个文本文件的内容按行读出，每读出一行就顺序添加行号，并写入到另一个文件中。
      */
-    @Test
-    public void writeLineNumber() {
-        var srcFile = new File("dbcp.txt");
-        var destFile = new File("dbcp-line-number.txt");
-
-        try (var fr = new FileReader(srcFile);
-             var fw = new FileWriter(destFile);
-             var br = new BufferedReader(fr);
-             var bw = new BufferedWriter(fw)) {
-            String line;
-            int lineNumber = 1;
-            while (null != (line = br.readLine())) {
-                bw.write(lineNumber + " ");
-                bw.write(line);
-                bw.newLine();
-                lineNumber++;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     /**
      * 25. 使用RandomAccessFile流将一个文本文件倒置读出。
      */
-    @Test
-    public void readReversely() {
-        var file = new File("dbcp-line-number.txt");
-        var utf8 = StandardCharsets.UTF_8;
-        try (var raf = new RandomAccessFile(file, "r")) {
-            for (long l = file.length() - 1; l >= 0; l--) {
-                raf.seek(l);
-                // fixme 中文会乱码
-                // (char) 对应的是ASCII 不能识别中文
-                System.out.print((char) raf.read());
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     /**
      * 26. 使用ObjectInputStream类和ObjectOutputStream类有哪些注意事项？。
      */
-    @Test
-    public void objStream() {
-        // 对象所属类要满足一下要求：
-        // 1.实现接口Serializable
-        // 2.提供序列版本号
-        // 3.所有属性要可序列化
-
-        // 读写顺序要一致
-
-        var file = new File("obj.txt");
-        try (var fos = new FileOutputStream(file);
-             var oos = new ObjectOutputStream(fos)) {
-            oos.writeObject(new Person("李容蓉", 12));
-            oos.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        try (var fis = new FileInputStream(file);
-             var ois = new ObjectInputStream(fis)) {
-            var person = (Person) ois.readObject();
-            System.out.println(person);
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
     /**
      * 27. 用缓冲字符流读入一个文件中的内容，并把内容输出到一个新的文件中。
      */
-    @Test
-    public void charsReaderWriter() {
-        var srcFile = new File("dbcp.txt");
-        var destFile = new File("dbcp-dest.txt");
-        try (var fr = new FileReader(srcFile);
-             var fw = new FileWriter(destFile);
-             var br = new BufferedReader(fr);
-             var bw = new BufferedWriter(fw)) {
-            String line;
-            while (null != (line = br.readLine())) {
-                bw.write(line);
-                bw.newLine();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     /**
      * 28．使用输入流读取试题文件，每次显示试题文件中的一道题目。读取到字符“*”时暂停读取，等待用户从键盘输入答案。
      * 用户做完全部题目后。程序给出用户的得分。
      * 试题内容如下：
      * (1)北京奥运是什么时间开幕的？
-     * A.2008-08-08  B. 2008-08-01
+     *    A.2008-08-08  B. 2008-08-01
      * C.2008-10-01 D. 2008-07-08
      * ********************
      * (2)下列哪个国家不属于亚洲？
-     * A.沙特  B.印度 C.巴西  D.越南
+     *    A.沙特  B.印度 C.巴西  D.越南
      * ********************
      * (3)下列哪个国家最爱足球？
-     * A.刚果  B.越南 C.老挝  D.巴西
+     *    A.刚果  B.越南 C.老挝  D.巴西
      * ********************
      * (4)下列哪种动物属于猫科动物？
-     * A.鬣狗  B.犀牛 C.大象 D.狮子
+     *    A.鬣狗  B.犀牛 C.大象 D.狮子
      * ********************
-     * <p>
+     *
      * 2）程序运行如下：
      * (1)北京奥运是什么时间开幕的？
-     * A.2008-08-08  B. 2008-08-01
+     *    A.2008-08-08  B. 2008-08-01
      * C.2008-10-01 D. 2008-07-08
      * 输入选择的答案（A、B、C、D）：A
      * (2)下列哪个国家不属于亚洲？
-     * A.沙特  B.印度 C.巴西  D.越南
+     *    A.沙特  B.印度 C.巴西  D.越南
      * 输入选择的答案（A、B、C、D）：
      */
-    public void practice() {
-        var answers = new String[] {"A", "C", "D","C"};
-        var file = new File("lang/practice.txt");
-        var score = 0;
-        var in = new Scanner(System.in);
-
-        try (var fr = new FileReader(file);
-             var br = new BufferedReader(fr)) {
-            int i = 0;
-            String line;
-            while (null != (line = br.readLine())) {
-                if (line.contains("*")) {
-                    System.out.print("输入选择的答案（A、B、C、D）：");
-                    var answer = in.next();
-                    if (answers[i].equalsIgnoreCase(answer)) score += 10;
-                    i++;
-                    continue;
-                }
-                System.out.println(line);
-            }
-            System.out.println("成绩: " + score);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 }

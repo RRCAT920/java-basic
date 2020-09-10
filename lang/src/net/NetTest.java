@@ -347,7 +347,9 @@ public class NetTest {
             soc.shutdownOutput();
 
             String line;
-            while (null != (line = socRd.readLine())) {  // fixme 使用处理流有bug
+            // 读操作会刷新输出流的缓存，故此时才进行输出。
+            // 所以在读操作之前关闭输出流会抛出异常。
+            while (null != (line = socRd.readLine())) {
                 fileWr.write(line);
                 fileWr.newLine();
             }

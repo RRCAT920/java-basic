@@ -328,8 +328,7 @@ public class NetTest {
             System.out.println("hello");
             if ("GET HTTP1.0  /index.jsp".equals(req)) {
                 try (var fileRd = new BufferedReader(new FileReader("index.jsp"))) {
-                    String line;
-                    while (null != (line = fileRd.readLine())) {
+                    for (String line; null != (line = fileRd.readLine()); ) {
                         socWr.write(line);
                         socWr.newLine();
                     }
@@ -350,12 +349,12 @@ public class NetTest {
              var fileWr = new BufferedWriter(new FileWriter(file))) {
             var req = "GET HTTP1.0  /index.jsp";
             socWr.write(req);
+            socWr.flush();
             soc.shutdownOutput();
 
-            String line;
             // 读操作会刷新输出流的缓存，故此时才进行输出。
             // 所以在读操作之前关闭输出流会抛出异常。
-            while (null != (line = socRd.readLine())) {
+            for (String line; null != (line = socRd.readLine()); ) {
                 fileWr.write(line);
                 fileWr.newLine();
             }

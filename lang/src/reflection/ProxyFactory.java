@@ -26,7 +26,10 @@ public class ProxyFactory {
              */
             @Override
             public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-                return method.invoke(o, args);
+                HumanUtil.method1();
+                var value = method.invoke(o, args);
+                HumanUtil.method2();
+                return value;
             }
         };
         return Proxy.newProxyInstance(

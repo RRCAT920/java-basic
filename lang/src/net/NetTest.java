@@ -899,4 +899,26 @@ public class NetTest {
             e.printStackTrace();
         }
     }
+
+    @Test
+    public void newKeyboardServer() {
+        try (var soc = new ServerSocket(8000);
+             var incoming = soc.accept();
+             var socWr = new BufferedWriter(new OutputStreamWriter(incoming.getOutputStream()))) {
+            socWr.write("New keyboard red mx");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void newKeyboardClient() {
+        try (var soc = new Socket(InetAddress.getLocalHost(), 8000);
+             var socRd = new BufferedReader(new InputStreamReader(soc.getInputStream()))) {
+            var line = socRd.readLine();
+            System.out.println(line);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

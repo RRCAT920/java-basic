@@ -370,4 +370,72 @@ public class ReflectionTest {
         //noinspection ResultOfMethodCallIgnored
         file.createNewFile();
     }
+
+    /**
+     * 静态代理
+     * <p>
+     * 特点：代理类和被代理类在编译时就确定了✅
+     */
+    @Test
+    public void staticProxy() {
+        var proxy = new ClothFactoryProxy(new NikeClothFactory());
+        proxy.produce();
+    }
+
+    interface ClothFactory {
+        void produce();
+    }
+
+    static class ClothFactoryProxy implements ClothFactory {
+        private final ClothFactory factory;
+
+        public ClothFactoryProxy(ClothFactory factory) {
+            this.factory = factory;
+        }
+
+        @Override
+        public void produce() {
+            System.out.println("生产👔前的准备工作");
+            factory.produce();
+            System.out.println("生产👔后的收尾工作");
+        }
+    }
+
+    static class NikeClothFactory implements ClothFactory {
+        @Override
+        public void produce() {
+            System.out.println("生产NIKE");
+        }
+    }
+
+
+    /**
+     * 反射的动态性
+     * <p>
+     * 动态代理
+     * <p>难点</p>
+     * <ol>
+     *     <li>获得被代理类对象</li>
+     *     <li>调用同名方法</li>
+     * </ol>
+     */
+    @Test
+    public void dynamicProxy() {
+        System.out.println("HumanProxy:⬇️");
+
+        var superMan = new SuperMan();
+        var humanProxy = (Human) ProxyFactory.getProxyOf(superMan);
+
+        System.out.println(humanProxy.getBelief());
+        humanProxy.eat("栖凤渡鱼粉🍜");
+
+        System.out.println();
+        System.out.println("ClothFactoryProxy:⬇️");
+
+        var nikeClothFactory = new NikeClothFactory();
+        var clothFactoryProxy =
+                (ClothFactory) ProxyFactory.getProxyOf(nikeClothFactory);
+
+        clothFactoryProxy.produce();
+    }
 }

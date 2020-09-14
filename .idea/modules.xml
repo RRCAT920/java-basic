@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/design-pattern/design-pattern.iml" filepath="$PROJECT_DIR$/design-pattern/design-pattern.iml" />
       <module fileurl="file://$PROJECT_DIR$/java-basic.iml" filepath="$PROJECT_DIR$/java-basic.iml" />
       <module fileurl="file://$PROJECT_DIR$/lang/lang.iml" filepath="$PROJECT_DIR$/lang/lang.iml" />
+      <module fileurl="file://$PROJECT_DIR$/modularity/modularity.iml" filepath="$PROJECT_DIR$/modularity/modularity.iml" />
     </modules>
   </component>
 </project>

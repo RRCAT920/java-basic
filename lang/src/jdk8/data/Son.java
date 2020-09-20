@@ -6,8 +6,7 @@ package jdk8.data;
  */
 public class Son {
     private String name;
-    public Son() {
-    }
+    public Son() {}
 
     public Son(String name) {
         this.name = name;

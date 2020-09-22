@@ -1,7 +1,8 @@
-import comparable.Goods;
 import org.junit.Test;
 
 import java.util.Arrays;
+
+import comparable.Goods;
 
 /**
  * @author huzihao
@@ -30,6 +31,8 @@ public class CompareTest {
     @Test
     public void testComparator() {
         var strings = new String[]{"AA", "CC", "KK", "MM", "GG", "JJ", "DD"};
+
+        Arrays.sort(strings, (str1, str2) -> -str1.compareTo(str2));
         System.out.println(Arrays.toString(strings));
     }
 }

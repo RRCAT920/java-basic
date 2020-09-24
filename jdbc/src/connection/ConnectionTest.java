@@ -10,6 +10,8 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
+import util.JDBCUtil;
+
 /**
  * @author huzihao
  * @since 2020/9/24 16:38
@@ -94,17 +96,8 @@ public class ConnectionTest {
      */
     @Test
     public void testCxnUltimate() throws IOException, ClassNotFoundException, SQLException {
-        var in = ClassLoader.getSystemClassLoader()
-                .getResourceAsStream("jdbc.properties");
-        var prop = new Properties();
-        prop.load(in);
-        var url = prop.getProperty("url");
-        var user = prop.getProperty("user");
-        var password = prop.getProperty("password");
-        var driverClass = prop.getProperty("driverClass");
-
-        Class.forName(driverClass);
-        var cxn = DriverManager.getConnection(url, user, password);
-        System.out.println(cxn);
+        try (var cxn = JDBCUtil.getConnection()) {
+            System.out.println(cxn);
+        }
     }
 }

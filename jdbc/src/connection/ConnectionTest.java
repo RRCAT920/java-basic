@@ -94,8 +94,7 @@ public class ConnectionTest {
      */
     @Test
     public void testCxnUltimate() throws IOException, ClassNotFoundException, SQLException {
-        var in = ConnectionTest.class
-                .getClassLoader()
+        var in = ClassLoader.getSystemClassLoader()
                 .getResourceAsStream("jdbc.properties");
         var prop = new Properties();
         prop.load(in);

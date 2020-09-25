@@ -95,4 +95,29 @@ public interface StringUtils {
 
         return hashSet;
     }
+
+    /**
+     * Change snake style identifier to camelCase
+     * @param identifier identifier
+     * @return camelCase style identifier
+     */
+    static String snakeToCamel(String identifier) {
+        // 不处理 关键字\_前缀\_后缀\仅有_的字符串
+        if (StringUtils.getKeywords().contains(identifier) ||
+                identifier.startsWith("_") || identifier.endsWith("_")) {
+            throw new IllegalArgumentException("Won't process keywords, prefix of _, suffix of _ " +
+                    "and string which only contains _");
+        }
+
+        final var builder = new StringBuilder();
+        var hasUnderscore = false;
+        for (var i = -1; -1 != (i = identifier.indexOf("_", i + 1)) &&
+                i < identifier.length() - 1; ) {
+            hasUnderscore = true;
+            builder.append(identifier, 0, i)
+                    .append(Character.toUpperCase(identifier.charAt(i + 1)))
+                    .append(identifier.substring(i + 2));
+        }
+        return hasUnderscore ? builder.toString() : identifier;
+    }
 }

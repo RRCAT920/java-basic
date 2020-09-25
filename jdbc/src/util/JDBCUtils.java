@@ -20,18 +20,23 @@ public class JDBCUtils {
     // 为了代码兼容设置成public
     public static Connection getConnection() throws IOException, ClassNotFoundException,
             SQLException {
-        var in = ClassLoader.getSystemClassLoader()
-                .getResourceAsStream("jdbc.properties");
-        var prop = new Properties();
-        prop.load(in);
-        var url = prop.getProperty("url");
-        var user = prop.getProperty("user");
-        var password = prop.getProperty("password");
-        var driverClass = prop.getProperty("driverClass");
+        try (var in = ClassLoader.getSystemClassLoader()
+                .getResourceAsStream("jdbc.properties")) {
+            var prop = new Properties();
+            prop.load(in);
+            var url = prop.getProperty("url");
+            var user = prop.getProperty("user");
+            var password = prop.getProperty("password");
+            var driverClass = prop.getProperty("driverClass");
 
-        Class.forName(driverClass);
-        return DriverManager.getConnection(url, user, password);
+            Class.forName(driverClass);
+            return DriverManager.getConnection(url, user, password);
+        }
     }
+
+//    public static Connection getConnection(String path) {
+//
+//    }
 
     /**
      * 通用的增删改（没有查）

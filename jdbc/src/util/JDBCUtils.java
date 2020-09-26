@@ -1,42 +1,100 @@
 package util;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 
 /**
+ * 在配置文件（默认database.properties）中
+ * <ol>
+ *     <li>
+ *         必须提供：
+ *         <ul>
+ *             <li>url</li>
+ *             <li>user</li>
+ *             <li>password</li>
+ *             <li>driverClass</li>
+ *         </ul>
+ *     </li>
+ *     <li>
+ *         可选提供:
+ *         <ul>
+ *             <li>sql</li>
+ *             <li>holderValues（值用,分隔且不要在最后加,）</li>
+ *         </ul>
+ *     </li>
+ * </ol>
  * @author huzihao
  * @since 2020/9/24 22:11
+ * @see JDBCUtils#databaseFile
+ * @see JDBCUtils#url
+ * @see JDBCUtils#user
+ * @see JDBCUtils#password
+ * @see JDBCUtils#sql
+ * @see JDBCUtils#holderValues
  */
-public class JDBCUtils {
-    /**
-     * 根据配置文件（jdbc.properties）获得数据库连接
-     * @return 数据库连接
-     */
-    // 为了代码兼容设置成public
-    public static Connection getConnection() throws IOException, ClassNotFoundException,
-            SQLException {
-        try (var in = ClassLoader.getSystemClassLoader()
-                .getResourceAsStream("jdbc.properties")) {
-            var prop = new Properties();
-            prop.load(in);
-            var url = prop.getProperty("url");
-            var user = prop.getProperty("user");
-            var password = prop.getProperty("password");
-            var driverClass = prop.getProperty("driverClass");
+public final class JDBCUtils {
+    private static File databaseFile = new File("database.properties");
+    private static long lastModified = databaseFile.lastModified();
+    private static String url;
+    private static String user;
+    private static String password;
+    private static String sql;
+    private static List<Object> holderValues;
 
-            Class.forName(driverClass);
-            return DriverManager.getConnection(url, user, password);
+    static {
+        if (databaseFile.exists()) load();
+    }
+
+    private static void load() {
+        try (final var in = ClassLoader.getSystemClassLoader()
+                .getResourceAsStream(databaseFile.getName())) {
+            final var prop = new Properties();
+            prop.load(in);
+            url = prop.getProperty("url");
+            user = prop.getProperty("user");
+            password = prop.getProperty("password");
+            sql = prop.getProperty("sql");
+            holderValues = getHolderValueList(prop.getProperty("holderValues"));
+            Class.forName(prop.getProperty("driverClass"));
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
         }
     }
 
-//    public static Connection getConnection(String path) {
-//
-//    }
+    /**
+     * 设置数据库配置路径
+     * @param path 配置路径
+     */
+    public static void setPath(String path) {
+        JDBCUtils.databaseFile = new File(path);
+        load();
+    }
+
+    private static void reload() {
+        var recentModified = databaseFile.lastModified();
+        if (lastModified != recentModified) {
+            lastModified = recentModified;
+            load();
+        }
+    }
+
+    /**
+     * 获得数据库连接
+     * @return 数据库连接
+     */
+    // 为了代码兼容设置成public
+    public static Connection getConnection() throws SQLException {
+        reload();
+        return DriverManager.getConnection(url, user, password);
+    }
 
     /**
      * 通用的增删改（没有查）
@@ -44,18 +102,31 @@ public class JDBCUtils {
      * @param holderValues 占位符对应的值
      */
     public static void execute(String sql, List<Object> holderValues) {
-        var size = (int) sql.chars().filter(ch -> '?' == ch).count();
-        if (size != holderValues.size()) throw new IllegalArgumentException("占位符和值的数量不同");
+//        Want to be more user-friendly add this
+//        var size = (int) sql.chars().filter(ch -> '?' == ch).count();
+//        if (size != holderValues.size()) throw new IllegalArgumentException("占位符和值的数量不同");
 
         try (var cxn = getConnection();
              var stmt = cxn.prepareStatement(sql)) {
-            for (var i = 0; i < size; i++) {
+            for (var i = 0; null != holderValues && i < holderValues.size(); i++) {
                 stmt.setObject(i + 1, holderValues.get(i));
             }
             stmt.execute();
-        } catch (IOException | SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void execute() {
+        execute(sql, holderValues);
+    }
+
+    /**
+     * 基本查询
+     * @see JDBCUtils#query
+     */
+    public static <T> T query(Class<T> aClass) {
+        return query(aClass, sql, holderValues);
     }
 
     /**
@@ -70,7 +141,7 @@ public class JDBCUtils {
         T instance = null;
         try (final var cxn = getConnection();
              final var stmt = cxn.prepareStatement(sql)) {
-            for (int i = 0; i < holderValues.size(); i++) {
+            for (int i = 0; null != holderValues && i < holderValues.size(); i++) {
                 stmt.setObject(i + 1, holderValues.get(i));
             }
             final var resultSet = stmt.executeQuery();
@@ -84,19 +155,20 @@ public class JDBCUtils {
 //                    System.out.println(metaData.getColumnTypeName(i + 1));
                 }
             }
-        } catch (IOException | InvocationTargetException | NoSuchMethodException |
+        } catch (InvocationTargetException | NoSuchMethodException |
                 IllegalAccessException | NoSuchFieldException | SQLException |
-                ClassNotFoundException | InstantiationException e) {
+                InstantiationException e) {
             e.printStackTrace();
         }
         return instance;
     }
 
-    /**
-     * 基本查询
-     * @see JDBCUtils#query
-     */
-    public static <T> T query(Class<T> aClass, String sql) {
-        return query(aClass, sql, List.of());
+    private static List<Object> getHolderValueList(String holderValues) {
+        if (holderValues.contains(",")) return Arrays.asList(holderValues.split(","));
+        return Collections.singletonList(holderValues);
+    }
+
+    public static void main(String[] args) {
+        System.out.println(getHolderValueList("1"));
     }
 }

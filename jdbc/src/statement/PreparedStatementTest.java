@@ -2,7 +2,6 @@ package statement;
 
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -37,7 +36,7 @@ public class PreparedStatementTest {
                     Date.valueOf(LocalDate.of(1000, 1, 1)));
 
             stmt.execute();
-        } catch (IOException | ClassNotFoundException | SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
@@ -59,7 +58,7 @@ public class PreparedStatementTest {
             stmt.setObject(1, "莫扎特");
             stmt.setObject(2, 18);
             stmt.execute();
-        } catch (IOException | SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
@@ -91,7 +90,7 @@ public class PreparedStatementTest {
                         resultSet.getDate(4));
                 System.out.println(customer);
             }
-        } catch (IOException | SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
@@ -115,8 +114,7 @@ public class PreparedStatementTest {
                     field.set(customer, resultSet.getObject(i + 1));
                 }
             }
-        } catch (IOException | SQLException | ClassNotFoundException | NoSuchFieldException |
-                IllegalAccessException e) {
+        } catch (SQLException | NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
         }
         return customer;
@@ -155,7 +153,7 @@ public class PreparedStatementTest {
             final var password = resultSet.getString(2);
             System.out.println(user);
             System.out.println(password);
-        } catch (SQLException | IOException | ClassNotFoundException throwables) {
+        } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
     }
@@ -183,4 +181,12 @@ public class PreparedStatementTest {
                 " where order_id = ?";
         System.out.println(JDBCUtils.query(Order.class, sql, Collections.singletonList(1)));
     }
+
+    @Test
+    public void testNewJDBCUtils() {
+        JDBCUtils.setPath("database-test.properties");
+        final var customer = JDBCUtils.query(Customer.class);
+        System.out.println(customer);
+    }
+
 }

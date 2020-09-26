@@ -7,8 +7,8 @@ import java.util.Set;
  * @author huzihao
  * @since 2020/9/25 17:33
  */
-public interface StringUtils {
-    static Set<String> getKeywords() {
+public final class StringUtils {
+    public static Set<String> getKeywords() {
         var hashSet = new HashSet<String>();
 //        abstract   continue   for          new         switch
         {
@@ -101,7 +101,7 @@ public interface StringUtils {
      * @param identifier identifier
      * @return camelCase style identifier
      */
-    static String snakeToCamel(String identifier) {
+    public static String snakeToCamel(String identifier) {
         // 不处理 关键字\_前缀\_后缀\仅有_的字符串
         if (StringUtils.getKeywords().contains(identifier) ||
                 identifier.startsWith("_") || identifier.endsWith("_")) {

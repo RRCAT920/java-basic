@@ -142,12 +142,12 @@ public class PreparedStatementTest {
 
     @Test
     public void sqlInject() {
-        // '?'不是占位符，避免SQL注入
-        var sql = "select user, password from user_table where user = '?' and password = '?'";
+        // 已经预编译，不能进行SQL注入
+        var sql = "select user, password from user_table where user = ? and password = ?";
         try (final var cxn = JDBCUtils.getConnection();
              final var stmt = cxn.prepareStatement(sql)) {
-            stmt.setString(1, "'1' or '");
-            stmt.setString(2, "= 1 or '1' = '1");
+            stmt.setString(1, "1 or 1='");
+            stmt.setString(2, "' or 1 = 1");
             final var resultSet = stmt.executeQuery();
             final var user = resultSet.getString(1);
             final var password = resultSet.getString(2);
@@ -185,8 +185,7 @@ public class PreparedStatementTest {
     @Test
     public void testNewJDBCUtils() {
         JDBCUtils.setPath("database-test.properties");
-        final var customer = JDBCUtils.query(Customer.class);
-        System.out.println(customer);
+        final var customers = JDBCUtils.query(Customer.class);
+        System.out.println(customers);
     }
-
 }

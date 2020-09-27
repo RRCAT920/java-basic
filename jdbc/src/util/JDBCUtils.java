@@ -6,6 +6,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -42,16 +43,11 @@ import java.util.Properties;
  */
 public final class JDBCUtils {
     private static File databaseFile = new File("database.properties");
-    private static long lastModified = databaseFile.lastModified();
     private static String url;
     private static String user;
     private static String password;
     private static String sql;
     private static List<Object> holderValues;
-
-    static {
-        if (databaseFile.exists()) load();
-    }
 
     private static void load() {
         try (final var in = ClassLoader.getSystemClassLoader()
@@ -78,21 +74,13 @@ public final class JDBCUtils {
         load();
     }
 
-    private static void reload() {
-        var recentModified = databaseFile.lastModified();
-        if (lastModified != recentModified) {
-            lastModified = recentModified;
-            load();
-        }
-    }
-
     /**
      * 获得数据库连接
      * @return 数据库连接
      */
     // 为了代码兼容设置成public
     public static Connection getConnection() throws SQLException {
-        reload();
+        load();
         return DriverManager.getConnection(url, user, password);
     }
 
@@ -125,7 +113,7 @@ public final class JDBCUtils {
      * 基本查询
      * @see JDBCUtils#query
      */
-    public static <T> T query(Class<T> aClass) {
+    public static <T> List<T> query(Class<T> aClass) {
         return query(aClass, sql, holderValues);
     }
 
@@ -137,22 +125,24 @@ public final class JDBCUtils {
      * @param <T> 表对应的Java类
      * @return 表对应的Java类的一个对象
      */
-    public static <T> T query(Class<T> aClass, String sql, List<Object> holderValues) {
-        T instance = null;
+    public static <T> List<T> query(Class<T> aClass, String sql, List<Object> holderValues) {
+        var list = new ArrayList<T>();
         try (final var cxn = getConnection();
              final var stmt = cxn.prepareStatement(sql)) {
             for (int i = 0; null != holderValues && i < holderValues.size(); i++) {
                 stmt.setObject(i + 1, holderValues.get(i));
             }
-            final var resultSet = stmt.executeQuery();
-            if (resultSet.next()) {
-                final var metaData = resultSet.getMetaData();
-                instance = aClass.getDeclaredConstructor().newInstance();
-                for (int i = 0; i < metaData.getColumnCount(); i++) {
-                    final var field = aClass.getDeclaredField(metaData.getColumnLabel(i + 1));
-                    field.setAccessible(true);
-                    field.set(instance, resultSet.getObject(i + 1));
+            try (final var resultSet = stmt.executeQuery()) {
+                if (resultSet.next()) {
+                    final var metaData = resultSet.getMetaData();
+                    var instance = aClass.getDeclaredConstructor().newInstance();
+                    for (int i = 0; i < metaData.getColumnCount(); i++) {
+                        final var field = aClass.getDeclaredField(metaData.getColumnLabel(i + 1));
+                        field.setAccessible(true);
+                        field.set(instance, resultSet.getObject(i + 1));
 //                    System.out.println(metaData.getColumnTypeName(i + 1));
+                    }
+                    list.add(instance);
                 }
             }
         } catch (InvocationTargetException | NoSuchMethodException |
@@ -160,10 +150,11 @@ public final class JDBCUtils {
                 InstantiationException e) {
             e.printStackTrace();
         }
-        return instance;
+        return 0 == list.size() ? null : list;
     }
 
     private static List<Object> getHolderValueList(String holderValues) {
+        if (null == holderValues) return null;
         if (holderValues.contains(",")) return Arrays.asList(holderValues.split(","));
         return Collections.singletonList(holderValues);
     }

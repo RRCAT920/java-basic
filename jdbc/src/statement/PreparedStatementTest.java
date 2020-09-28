@@ -5,8 +5,10 @@ import org.junit.jupiter.api.Test;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Scanner;
 
 import record.Customer;
 import record.Order;
@@ -18,6 +20,7 @@ import util.StringUtils;
  * @since 2020/9/24 21:02
  */
 public class PreparedStatementTest {
+    private static final Scanner in = new Scanner(System.in);
     /**
      * Statement弊端
      * <ol>
@@ -187,5 +190,59 @@ public class PreparedStatementTest {
         JDBCUtils.setPath("database-test.properties");
         final var customers = JDBCUtils.query(Customer.class);
         System.out.println(customers);
+    }
+
+    public static void main(String[] args) {
+        insertExamStudent();
+    }
+
+    /**
+     * 从控制台向数据库的表customers中插入一条数据
+     */
+    public static void userInput() {
+        System.out.print("请输入姓名：");
+        final var name = in.next();
+        System.out.print("请输入邮箱：");
+        final var email = in.next();
+        System.out.print("请输入生日(YYYY MM dd)：");
+        final var birth = Date.valueOf(LocalDate.of(in.nextInt(), in.nextInt(), in.nextInt()));
+        var sql = "insert into customers(name, email, birth) values(?, ?, ?)";
+        JDBCUtils.execute(sql, Arrays.asList(name, email, birth));
+    }
+
+    public static void insertExamStudent() {
+        System.out.print("Type: ");
+        final var type = in.nextInt();
+        System.out.print("IDCard: ");
+        final var idCard = in.next();
+        System.out.print("ExamCard: ");
+        final var examCard = in.next();
+        System.out.print("StudentName: ");
+        final var studentName = in.next();
+        System.out.print("Location: ");
+        final var location = in.next();
+        System.out.print("Grade: ");
+        final var grade = in.nextInt();
+        final var sql = "insert into exam_student(Type,IDCard,ExamCard,StudentName,Location,Grade)" +
+                " values(?,?,?,?,?,?)";
+        JDBCUtils.execute(sql, Arrays.asList(type, idCard, examCard, studentName, location, grade));
+        System.out.println("信息录入成功！");
+    }
+
+    public static void queryExamStudent() {
+        System.out.println("请选择您要输入的类型：");
+        System.out.println("a:准考证号");
+        System.out.println("b:身份证号");
+
+        switch (in.next()) {
+            case "a" -> {
+                System.out.print("请输入准考证号：");
+                var examCard = in.next();
+                final var sql = "select * from exam_student where examCard = ?";
+                // TODO: 2020/9/28
+//                JDBCUtils.query()
+
+            }
+        }
     }
 }

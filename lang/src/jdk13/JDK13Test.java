@@ -15,12 +15,12 @@ public class JDK13Test {
     @Test
     public void textBlocks() {
         var test = """
-               2
-                3
-               2
-                        """;
+             2
+                5
+               4
+                    """;
         //noinspection ConstantConditions
-        assert 7 == test.length();
+        assert (2 + 5 + 4) == test.length();
     }
 
     @Test

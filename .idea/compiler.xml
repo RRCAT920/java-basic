@@ -13,4 +13,7 @@
       <module name="modularity" target="14" />
     </bytecodeTargetLevel>
   </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_STRING" value="-Xlint:preview" />
+  </component>
 </project>

@@ -145,9 +145,8 @@ public final class JDBCUtils {
                     list.add(instance);
                 }
             }
-        } catch (InvocationTargetException | NoSuchMethodException |
-                IllegalAccessException | NoSuchFieldException | SQLException |
-                InstantiationException e) {
+        } catch (InvocationTargetException | NoSuchMethodException | IllegalAccessException |
+                NoSuchFieldException | SQLException | InstantiationException e) {
             e.printStackTrace();
         }
         return 0 == list.size() ? null : list;

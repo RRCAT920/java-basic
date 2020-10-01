@@ -137,7 +137,8 @@ public final class JDBCUtils {
                     final var metaData = resultSet.getMetaData();
                     var instance = aClass.getDeclaredConstructor().newInstance();
                     for (int i = 0; i < metaData.getColumnCount(); i++) {
-                        final var field = aClass.getDeclaredField(metaData.getColumnLabel(i + 1));
+                        final var field = aClass.getDeclaredField(
+                                metaData.getColumnLabel(i + 1));
                         field.setAccessible(true);
                         field.set(instance, resultSet.getObject(i + 1));
 //                    System.out.println(metaData.getColumnTypeName(i + 1));

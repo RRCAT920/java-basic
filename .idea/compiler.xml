@@ -9,8 +9,8 @@
         <outputRelativeToContentRoot value="true" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel target="14">
-      <module name="modularity" target="14" />
+    <bytecodeTargetLevel target="15">
+      <module name="modularity" target="15" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">

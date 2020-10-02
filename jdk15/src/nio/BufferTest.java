@@ -136,4 +136,17 @@ public class BufferTest {
             e.printStackTrace();
         }
     }
+    
+    @Test
+    public void transformWithChannel() {
+        try (var finChannel = FileChannel.open(Paths.get("Luffy.jpg"),
+                StandardOpenOption.READ);
+             var foutChannel = FileChannel.open(Paths.get("Lucy3.jpg"),
+                     StandardOpenOption.READ, StandardOpenOption.WRITE,
+                     StandardOpenOption.CREATE)) {
+            finChannel.transferTo(0, finChannel.size(), foutChannel);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

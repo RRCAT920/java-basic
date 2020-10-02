@@ -5,11 +5,13 @@ import org.junit.jupiter.api.Test;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.Arrays;
 
 /**
  * @author huzihao
@@ -136,7 +138,10 @@ public class BufferTest {
             e.printStackTrace();
         }
     }
-    
+
+    /**
+     * 直接缓冲区
+     */
     @Test
     public void transformWithChannel() {
         try (var finChannel = FileChannel.open(Paths.get("Luffy.jpg"),
@@ -148,5 +153,22 @@ public class BufferTest {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    public void ScatterAndGather() {
+         try (var srcFile = new RandomAccessFile("Luffy.jpg", "r");
+              var destFile = new RandomAccessFile("Lucy4.jpg", "rw");
+              var finChannel = srcFile.getChannel();
+              var foutChannel = destFile.getChannel()) {
+             var buffers = new ByteBuffer[]{ByteBuffer.allocate(1000), ByteBuffer.allocate(1024)};
+             while (-1 != finChannel.read(buffers)) {
+                 Arrays.stream(buffers).forEach(ByteBuffer::flip);
+                 foutChannel.write(buffers);
+                 Arrays.stream(buffers).forEach(ByteBuffer::clear);
+             }
+         } catch (IOException e) {
+             e.printStackTrace();
+         }
     }
 }

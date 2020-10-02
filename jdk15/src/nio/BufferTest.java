@@ -2,8 +2,14 @@ package nio;
 
 import org.junit.jupiter.api.Test;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 
 /**
  * @author huzihao
@@ -86,6 +92,48 @@ public class BufferTest {
             var length = Math.min(buf.remaining(), bytes.length);
             buf.get(bytes, 0, length);
             System.out.print(new String(bytes, 0, length, StandardCharsets.UTF_8));
+        }
+    }
+
+    @Test
+    public void directBuffer() {
+        var buf = ByteBuffer.allocateDirect(1024);
+        assert buf.isDirect();
+    }
+
+    @Test
+    public void copyFileUsingChannel() {
+        try (var fin = new FileInputStream("Luffy.jpg");
+             var fout = new FileOutputStream("Lucy.jpg");
+             var finChannel = fin.getChannel();
+             var foutChannel = fout.getChannel()) {
+            var buffer = ByteBuffer.allocate(1024);
+            while (-1 != finChannel.read(buffer)) {
+                buffer.flip();
+                foutChannel.write(buffer);
+                buffer.clear();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void memoryMapperFile() {
+        try (var finChannel = FileChannel.open(Paths.get("Luffy.jpg"),
+                StandardOpenOption.READ);
+             var foutChannel = FileChannel.open(Paths.get("Lucy2.jpg"),
+                     StandardOpenOption.READ, StandardOpenOption.WRITE,
+                     StandardOpenOption.CREATE)) {
+            var mappedFinBuffer = finChannel.map(FileChannel.MapMode.READ_ONLY,
+                    0, finChannel.size());
+            var mappedFoutBuffer = foutChannel.map(FileChannel.MapMode.READ_WRITE,
+                    0, finChannel.size());
+            var buffer = new byte[mappedFinBuffer.limit()];
+            mappedFinBuffer.get(buffer);
+            mappedFoutBuffer.put(buffer);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

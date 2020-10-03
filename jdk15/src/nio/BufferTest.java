@@ -7,7 +7,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
 import java.nio.channels.FileChannel;
+import java.nio.charset.CharacterCodingException;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
@@ -170,5 +173,26 @@ public class BufferTest {
          } catch (IOException e) {
              e.printStackTrace();
          }
+    }
+
+    @Test
+    public void testCharset() {
+        var charsets = Charset.availableCharsets();
+        charsets.forEach((name, charset) -> System.out.println(name + "=" + charset));
+    }
+
+    @Test
+    public void encodeAndDecode() throws CharacterCodingException {
+        var gbk = Charset.forName("GBK");
+        var encoder = gbk.newEncoder();
+        var decoder = gbk.newDecoder();
+        var charBuffer = CharBuffer.allocate(1024);
+
+        charBuffer.put("你好啊");
+        charBuffer.flip();
+        var byteBuffer = encoder.encode(charBuffer);
+        System.out.println(byteBuffer);
+        var charBufferFrom = decoder.decode(byteBuffer);
+        System.out.println(charBufferFrom);
     }
 }

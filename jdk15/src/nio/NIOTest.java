@@ -194,7 +194,7 @@ public class NIOTest {
     }
 
     @Test
-    public void server() {
+    public void BlockingServer() {
         try (var serverSocketChannel = ServerSocketChannel.open()
                 .bind(new InetSocketAddress(8000));
              var socketChannel = serverSocketChannel.accept();
@@ -206,13 +206,17 @@ public class NIOTest {
                 foutChannel.write(buffer);
                 buffer.clear();
             }
+
+            buffer.put("我收到了路飞的照片".getBytes());
+            buffer.flip();
+            socketChannel.write(buffer);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     @Test
-    public void client() throws IOException {
+    public void BlockingClient() throws IOException {
         try (var socketChannel = SocketChannel.open(new InetSocketAddress(
                 InetAddress.getLocalHost(), 8000));
              var finChannel = FileChannel.open(Paths.get("Luffy.jpg"),
@@ -223,6 +227,12 @@ public class NIOTest {
                 socketChannel.write(buffer);
                 buffer.clear();
             }
+            socketChannel.shutdownOutput();
+
+            for (var length = 0; -1 != (length = socketChannel.read(buffer)); ) {
+                System.out.print(new String(buffer.array(), 0, length));
+            }
+            System.out.println();
         }
     }
 }

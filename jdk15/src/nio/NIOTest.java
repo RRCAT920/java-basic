@@ -11,6 +11,7 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
+import java.nio.channels.DatagramChannel;
 import java.nio.channels.FileChannel;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
@@ -254,16 +255,16 @@ public class NIOTest {
                                 .configureBlocking(false);
                         socketChannel.register(selector, SelectionKey.OP_READ);
                     } else if (key.isReadable()) {
-                        var socketChannel = (SocketChannel) key.channel();
-                        var buffer = ByteBuffer.allocate(1024);
-                        var bytesOut = new ByteArrayOutputStream();
-                        for (var length = 0; -1 != (length = socketChannel.read(buffer)); ) {
-                            buffer.flip();
-                            bytesOut.write(buffer.array(), 0, length);
-                            buffer.clear();
+                        try (var socketChannel = (SocketChannel) key.channel()) {
+                            var buffer = ByteBuffer.allocate(1024);
+                            var bytesOut = new ByteArrayOutputStream();
+                            for (var length = 0; -1 != (length = socketChannel.read(buffer)); ) {
+                                buffer.flip();
+                                bytesOut.write(buffer.array(), 0, length);
+                                buffer.clear();
+                            }
+                            System.out.println(bytesOut.toString());
                         }
-                        System.out.println(bytesOut.toString());
-                        socketChannel.close();
                     }
                 }
             }
@@ -283,6 +284,47 @@ public class NIOTest {
                  buffer.clear()) {
                 buffer.flip();
                 socketChannel.write(buffer);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    @Test
+    public void send() {
+        try (var datagramChannel = (DatagramChannel) DatagramChannel.open()
+                .configureBlocking(false);
+             var finChannel = FileChannel.open(Paths.get("dbcp.txt"),
+                     StandardOpenOption.READ)) {
+            var buffer = ByteBuffer.allocate(1024);
+            for (var address = new InetSocketAddress(InetAddress.getLocalHost(), 8900);
+                 -1 != finChannel.read(buffer); buffer.clear()) {
+                buffer.flip();
+                datagramChannel.send(buffer, address);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    @Test
+    public void receive() {
+        try (var datagramChannel = (DatagramChannel) DatagramChannel.open()
+                .bind(new InetSocketAddress(InetAddress.getLocalHost(), 8900))
+                .configureBlocking(false);
+             var selector = Selector.open()) {
+            datagramChannel.register(selector, SelectionKey.OP_READ);
+            while (selector.select() > 0) {
+                for (var keyIter = selector.selectedKeys().iterator();
+                     keyIter.hasNext(); keyIter.remove()) {
+                    var key = keyIter.next();
+                    if (key.isReadable()) {
+                        var buffer = ByteBuffer.allocate(1024);
+                        datagramChannel.receive(buffer);
+                        buffer.flip();
+                        System.out.println(new String(buffer.array(), 0, buffer.limit()));
+                    }
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();

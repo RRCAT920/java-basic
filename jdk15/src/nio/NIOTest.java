@@ -13,6 +13,7 @@ import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.channels.DatagramChannel;
 import java.nio.channels.FileChannel;
+import java.nio.channels.Pipe;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
@@ -256,12 +257,11 @@ public class NIOTest {
                         socketChannel.register(selector, SelectionKey.OP_READ);
                     } else if (key.isReadable()) {
                         try (var socketChannel = (SocketChannel) key.channel()) {
-                            var buffer = ByteBuffer.allocate(1024);
                             var bytesOut = new ByteArrayOutputStream();
-                            for (var length = 0; -1 != (length = socketChannel.read(buffer)); ) {
+                            for (var buffer = ByteBuffer.allocate(1024);
+                                 -1 != socketChannel.read(buffer); buffer.clear()) {
                                 buffer.flip();
-                                bytesOut.write(buffer.array(), 0, length);
-                                buffer.clear();
+                                bytesOut.write(buffer.array(), 0, buffer.limit());
                             }
                             System.out.println(bytesOut.toString());
                         }
@@ -315,19 +315,46 @@ public class NIOTest {
              var selector = Selector.open()) {
             datagramChannel.register(selector, SelectionKey.OP_READ);
             while (selector.select() > 0) {
+                System.out.println("✨");
                 for (var keyIter = selector.selectedKeys().iterator();
                      keyIter.hasNext(); keyIter.remove()) {
                     var key = keyIter.next();
                     if (key.isReadable()) {
-                        var buffer = ByteBuffer.allocate(1024);
-                        datagramChannel.receive(buffer);
-                        buffer.flip();
-                        System.out.println(new String(buffer.array(), 0, buffer.limit()));
+                        try (var foutChannel = FileChannel.open(
+                                Paths.get("receive.txt"), StandardOpenOption.WRITE,
+                                StandardOpenOption.APPEND, StandardOpenOption.CREATE)) {
+                            var buffer = ByteBuffer.allocate(1024);
+                            datagramChannel.receive(buffer);
+                            buffer.flip();
+                            foutChannel.write(buffer);
+                        }
                     }
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    
+    @Test
+    public void pipe() throws IOException {
+        var pipe = Pipe.open();
+
+        try (var sinkChannel = pipe.sink()) {
+            var buffer = ByteBuffer.allocate(1024);
+            buffer.put("hello from outside!".getBytes()).flip();
+            sinkChannel.write(buffer);
+        }
+
+        new Thread(() -> {
+            var sourceChannel = pipe.source();
+            var buffer = ByteBuffer.allocate(1024);
+            try {
+                var length = sourceChannel.read(buffer);
+                System.out.println(new String(buffer.array(), 0, length));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 }

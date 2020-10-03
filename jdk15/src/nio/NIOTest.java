@@ -11,7 +11,6 @@ import java.nio.CharBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.CharacterCodingException;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
@@ -20,7 +19,7 @@ import java.util.Arrays;
  * @author huzihao
  * @since 2020/10/2 15:14
  */
-public class BufferTest {
+public class NIOTest {
     /**
      * 常用方法
      * <ol>
@@ -87,17 +86,12 @@ public class BufferTest {
         assert 1024 == buf.limit();
     }
 
-    // TODO: 2020/10/2 乱码
     @Test
     public void readLoop() {
         var buf = ByteBuffer.allocate(1024);
         buf.put("hello from the outside!".getBytes());
-
-        for (var bytes = new byte[10]; buf.hasRemaining(); ) {
-            var length = Math.min(buf.remaining(), bytes.length);
-            buf.get(bytes, 0, length);
-            System.out.print(new String(bytes, 0, length, StandardCharsets.UTF_8));
-        }
+        buf.flip();
+        System.out.println(new String(buf.array(), 0, buf.limit()));
     }
 
     @Test

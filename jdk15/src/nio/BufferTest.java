@@ -161,7 +161,7 @@ public class BufferTest {
               var destFile = new RandomAccessFile("Lucy4.jpg", "rw");
               var finChannel = srcFile.getChannel();
               var foutChannel = destFile.getChannel()) {
-             var buffers = new ByteBuffer[]{ByteBuffer.allocate(1000), ByteBuffer.allocate(1024)};
+             var buffers = IOUtils.getByteBuffers(1000, 1024);
              while (-1 != finChannel.read(buffers)) {
                  Arrays.stream(buffers).forEach(ByteBuffer::flip);
                  foutChannel.write(buffers);

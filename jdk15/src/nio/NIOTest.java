@@ -2,6 +2,7 @@ package nio;
 
 import org.junit.jupiter.api.Test;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -11,6 +12,8 @@ import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.channels.FileChannel;
+import java.nio.channels.SelectionKey;
+import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.nio.charset.CharacterCodingException;
@@ -233,6 +236,56 @@ public class NIOTest {
                 System.out.print(new String(buffer.array(), 0, length));
             }
             System.out.println();
+        }
+    }
+
+    @Test
+    public void NonBlockingTCPServer() {
+        try (var serverSocketChannel = (ServerSocketChannel) ServerSocketChannel
+                .open().bind(new InetSocketAddress(8000)).configureBlocking(false);
+             var selector = Selector.open()) {
+            serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
+            while (selector.select() > 0) {
+                for (var keyIter = selector.selectedKeys().iterator();
+                     keyIter.hasNext(); keyIter.remove()) {
+                    var key = keyIter.next();
+                    if (key.isAcceptable()) {
+                        var socketChannel = serverSocketChannel.accept()
+                                .configureBlocking(false);
+                        socketChannel.register(selector, SelectionKey.OP_READ);
+                    } else if (key.isReadable()) {
+                        var socketChannel = (SocketChannel) key.channel();
+                        var buffer = ByteBuffer.allocate(1024);
+                        var bytesOut = new ByteArrayOutputStream();
+                        for (var length = 0; -1 != (length = socketChannel.read(buffer)); ) {
+                            buffer.flip();
+                            bytesOut.write(buffer.array(), 0, length);
+                            buffer.clear();
+                        }
+                        System.out.println(bytesOut.toString());
+                        socketChannel.close();
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void NonBlockingTCPClient() {
+        try (var socketChannel = ((SocketChannel) SocketChannel
+                .open(new InetSocketAddress(InetAddress.getLocalHost(), 8000))
+                .configureBlocking(false));
+             var finChannel = FileChannel.open(Paths.get("dbcp.txt"),
+                     StandardOpenOption.READ)) {
+            for (var buffer = ByteBuffer.allocate(1024); -1 != finChannel.read(buffer);
+                 buffer.clear()) {
+                buffer.flip();
+                socketChannel.write(buffer);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

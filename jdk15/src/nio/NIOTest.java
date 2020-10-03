@@ -6,9 +6,13 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.channels.FileChannel;
+import java.nio.channels.ServerSocketChannel;
+import java.nio.channels.SocketChannel;
 import java.nio.charset.CharacterCodingException;
 import java.nio.charset.Charset;
 import java.nio.file.Paths;
@@ -124,13 +128,13 @@ public class NIOTest {
              var foutChannel = FileChannel.open(Paths.get("Lucy2.jpg"),
                      StandardOpenOption.READ, StandardOpenOption.WRITE,
                      StandardOpenOption.CREATE)) {
-            var mappedFinBuffer = finChannel.map(FileChannel.MapMode.READ_ONLY,
+            var finMappedBuffer = finChannel.map(FileChannel.MapMode.READ_ONLY,
                     0, finChannel.size());
-            var mappedFoutBuffer = foutChannel.map(FileChannel.MapMode.READ_WRITE,
+            var foutMappedBuffer = foutChannel.map(FileChannel.MapMode.READ_WRITE,
                     0, finChannel.size());
-            var buffer = new byte[mappedFinBuffer.limit()];
-            mappedFinBuffer.get(buffer);
-            mappedFoutBuffer.put(buffer);
+            var buffer = new byte[finMappedBuffer.limit()];
+            finMappedBuffer.get(buffer);
+            foutMappedBuffer.put(buffer);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -144,8 +148,7 @@ public class NIOTest {
         try (var finChannel = FileChannel.open(Paths.get("Luffy.jpg"),
                 StandardOpenOption.READ);
              var foutChannel = FileChannel.open(Paths.get("Lucy3.jpg"),
-                     StandardOpenOption.READ, StandardOpenOption.WRITE,
-                     StandardOpenOption.CREATE)) {
+                     StandardOpenOption.WRITE, StandardOpenOption.CREATE)) {
             finChannel.transferTo(0, finChannel.size(), foutChannel);
         } catch (IOException e) {
             e.printStackTrace();
@@ -188,5 +191,38 @@ public class NIOTest {
         System.out.println(byteBuffer);
         var charBufferFrom = decoder.decode(byteBuffer);
         System.out.println(charBufferFrom);
+    }
+
+    @Test
+    public void server() {
+        try (var serverSocketChannel = ServerSocketChannel.open()
+                .bind(new InetSocketAddress(8000));
+             var socketChannel = serverSocketChannel.accept();
+             var foutChannel = FileChannel.open(Paths.get("server-Luffy.jpg"),
+                     StandardOpenOption.WRITE, StandardOpenOption.CREATE)) {
+            var buffer = ByteBuffer.allocate(1024);
+            while (-1 != socketChannel.read(buffer)) {
+                buffer.flip();
+                foutChannel.write(buffer);
+                buffer.clear();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void client() throws IOException {
+        try (var socketChannel = SocketChannel.open(new InetSocketAddress(
+                InetAddress.getLocalHost(), 8000));
+             var finChannel = FileChannel.open(Paths.get("Luffy.jpg"),
+                     StandardOpenOption.READ)) {
+            var buffer = ByteBuffer.allocate(1024);
+            while (-1 != finChannel.read(buffer)) {
+                buffer.flip();
+                socketChannel.write(buffer);
+                buffer.clear();
+            }
+        }
     }
 }

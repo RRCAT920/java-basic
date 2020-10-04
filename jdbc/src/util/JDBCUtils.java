@@ -90,6 +90,7 @@ public final class JDBCUtils {
      * @param sql 要执行的SQL语句
      * @param holderValues 占位符对应的值
      */
+    // TODO: 2020/10/4 如何插入Blob类型和查询Blob类型
     public static void execute(String sql, List<Object> holderValues) {
 //        Want to be more user-friendly add this
 //        var size = (int) sql.chars().filter(ch -> '?' == ch).count();
@@ -113,7 +114,7 @@ public final class JDBCUtils {
     /**
      * 基本查询
      * @see JDBCUtils#query
-     * @return
+     * @return 表对应的Java类的一个对象
      */
     public static <T> Optional<List<T>> query(Class<T> aClass) {
         return query(aClass, sql, holderValues);

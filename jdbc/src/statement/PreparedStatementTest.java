@@ -10,8 +10,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
-import record.Customer;
-import record.Order;
+import pojo.Customer;
+import pojo.ExamStudent;
+import pojo.Order;
 import util.JDBCUtils;
 import util.StringUtils;
 

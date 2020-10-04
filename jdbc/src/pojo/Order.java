@@ -1,4 +1,4 @@
-package record;
+package pojo;
 
 import java.sql.Date;
 import java.util.Objects;

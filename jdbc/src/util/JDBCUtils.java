@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.Properties;
 
 /**
@@ -112,8 +113,9 @@ public final class JDBCUtils {
     /**
      * 基本查询
      * @see JDBCUtils#query
+     * @return
      */
-    public static <T> List<T> query(Class<T> aClass) {
+    public static <T> Optional<List<T>> query(Class<T> aClass) {
         return query(aClass, sql, holderValues);
     }
 
@@ -125,24 +127,16 @@ public final class JDBCUtils {
      * @param <T> 表对应的Java类
      * @return 表对应的Java类的一个对象
      */
-    public static <T> List<T> query(Class<T> aClass, String sql, List<Object> holderValues) {
+    public static <T> Optional<List<T>> query(Class<T> aClass, String sql, List<Object> holderValues) {
         var list = new ArrayList<T>();
         try (final var cxn = getConnection();
              final var stmt = cxn.prepareStatement(sql)) {
             for (int i = 0; null != holderValues && i < holderValues.size(); i++) {
                 stmt.setObject(i + 1, holderValues.get(i));
             }
-            try (final var resultSet = stmt.executeQuery()) {
-                if (resultSet.next()) {
-                    final var metaData = resultSet.getMetaData();
-                    var instance = aClass.getDeclaredConstructor().newInstance();
-                    for (int i = 0; i < metaData.getColumnCount(); i++) {
-                        final var field = aClass.getDeclaredField(
-                                metaData.getColumnLabel(i + 1));
-                        field.setAccessible(true);
-                        field.set(instance, resultSet.getObject(i + 1));
-//                    System.out.println(metaData.getColumnTypeName(i + 1));
-                    }
+            try (var resultSet = stmt.executeQuery()) {
+                while (resultSet.next()) {
+                    var instance = getT(aClass, resultSet);
                     list.add(instance);
                 }
             }
@@ -150,7 +144,21 @@ public final class JDBCUtils {
                 NoSuchFieldException | SQLException | InstantiationException e) {
             e.printStackTrace();
         }
-        return 0 == list.size() ? null : list;
+        return Optional.ofNullable(0 == list.size() ? null : list);
+    }
+
+    private static <T> T getT(Class<T> aClass, java.sql.ResultSet resultSet)
+            throws SQLException, InstantiationException, IllegalAccessException,
+            InvocationTargetException, NoSuchMethodException, NoSuchFieldException {
+        var metaData = resultSet.getMetaData();
+        var instance = aClass.getDeclaredConstructor().newInstance();
+        for (int i = 0; i < metaData.getColumnCount(); i++) {
+            var field = aClass.getDeclaredField(
+                    metaData.getColumnLabel(i + 1));
+            field.setAccessible(true);
+            field.set(instance, resultSet.getObject(i + 1));
+        }
+        return instance;
     }
 
     private static List<Object> getHolderValueList(String holderValues) {

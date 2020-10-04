@@ -193,7 +193,7 @@ public class PreparedStatementTest {
     }
 
     public static void main(String[] args) {
-        insertExamStudent();
+        queryExamStudent();
     }
 
     /**
@@ -233,16 +233,38 @@ public class PreparedStatementTest {
         System.out.println("请选择您要输入的类型：");
         System.out.println("a:准考证号");
         System.out.println("b:身份证号");
+        var sql = "select FlowID flowId, Type type, IDCard idCard, ExamCard examCard, StudentName studentName, Location location, Grade grade from exam_student where %s = ?";
 
         switch (in.next()) {
             case "a" -> {
-                System.out.print("请输入准考证号：");
-                var examCard = in.next();
-                final var sql = "select * from exam_student where examCard = ?";
-                // TODO: 2020/9/28
-//                JDBCUtils.query()
-
+                System.out.println("请输入准考证号：");
+                sql = sql.formatted("ExamCard");
             }
+            case "b" -> {
+                System.out.println("请输入身份证号: ");
+                sql = sql.formatted("IDCard");
+            }
+            case "c" -> {
+                System.out.println("您的输入有误，请重新进入程序");
+                return;
+            }
+        }
+
+        var students = JDBCUtils
+                .query(ExamStudent.class, sql, Collections.singletonList(in.next()))
+                .orElse(null);
+        if (null != students) {
+            System.out.println("========查询结果========");
+            var student = students.get(0);
+            System.out.printf("%-6s%d%n", "流水号:", student.getFlowId());
+            System.out.printf("%-6s%d%n", "四级/六级:", student.getType());
+            System.out.printf("%-6s%s%n", "身份证号:", student.getIdCard());
+            System.out.printf("%-6s%s%n", "准考证号:", student.getExamCard());
+            System.out.printf("%-6s%s%n", "学生姓名:", student.getStudentName());
+            System.out.printf("%-6s%s%n", "区域:", student.getLocation());
+            System.out.printf("%-6s%d%n", "成绩:", student.getGrade());
+        } else {
+            System.out.println("查无此人，请重新进入程序");
         }
     }
 }

@@ -193,7 +193,7 @@ public class PreparedStatementTest {
     }
 
     public static void main(String[] args) {
-        queryExamStudent();
+        deleteExamStudentByExamCard();
     }
 
     /**
@@ -265,6 +265,21 @@ public class PreparedStatementTest {
             System.out.printf("%-6s%d%n", "成绩:", student.getGrade());
         } else {
             System.out.println("查无此人，请重新进入程序");
+        }
+    }
+
+    public static void deleteExamStudentByExamCard() {
+        System.out.println("请输入学生的考号：");
+        var examCard = in.next();
+        var querySql = "select FlowID flowId from exam_student where ExamCard = ?";
+        var students = JDBCUtils.query(ExamStudent.class, querySql,
+                Collections.singletonList(examCard)).orElse(null);
+        if (null != students) {
+            var sql = "delete from exam_student where ExamCard = ?";
+            JDBCUtils.execute(sql, Collections.singletonList(examCard));
+            System.out.println("删除成功!");
+        } else {
+            System.out.println("查无此人，请重新输入!");
         }
     }
 }

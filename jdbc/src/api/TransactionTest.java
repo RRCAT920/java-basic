@@ -46,6 +46,7 @@ public class TransactionTest {
         } finally {
             if (null != cxn) {
                 try {
+                    cxn.setAutoCommit(true);
                     cxn.close();
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();

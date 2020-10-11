@@ -96,15 +96,32 @@ public final class JDBCUtils {
 //        var size = (int) sql.chars().filter(ch -> '?' == ch).count();
 //        if (size != holderValues.size()) throw new IllegalArgumentException("占位符和值的数量不同");
 
-        try (var cxn = getConnection();
-             var stmt = cxn.prepareStatement(sql)) {
+        try (var cxn = getConnection()) {
+            execute(cxn, sql, holderValues);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void execute(String sql, Object holderValues) {
+        execute(sql, Collections.singletonList(holderValues));
+    }
+
+    // 处理事务的版本
+    public static void execute(Connection connection, String sql, List<Object> holderValues) {
+        try (var stmt = connection.prepareStatement(sql)) {
             for (var i = 0; null != holderValues && i < holderValues.size(); i++) {
                 stmt.setObject(i + 1, holderValues.get(i));
             }
             stmt.execute();
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
         }
+    }
+
+    public static void execute(Connection connection, String sql, Object holderValues) {
+        execute(connection, sql, Collections.singletonList(holderValues));
     }
 
     public static void execute() {

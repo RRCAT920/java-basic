@@ -1,4 +1,4 @@
-package connection;
+package api;
 
 import com.mysql.cj.jdbc.Driver;
 

@@ -120,8 +120,8 @@ public final class JDBCUtils {
         }
     }
 
-    public static void execute(Connection connection, String sql, Object holderValues) {
-        execute(connection, sql, Collections.singletonList(holderValues));
+    public static void execute(Connection connection, String sql, Object holderValue) {
+        execute(connection, sql, Collections.singletonList(holderValue));
     }
 
     public static void execute() {
@@ -146,9 +146,22 @@ public final class JDBCUtils {
      * @return 表对应的Java类的一个对象
      */
     public static <T> Optional<List<T>> query(Class<T> aClass, String sql, List<Object> holderValues) {
+        try (var cxn = getConnection()) {
+            return query(cxn, aClass, sql, holderValues);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+            return Optional.empty();
+        }
+    }
+
+    public static <T> Optional<List<T>> query(Class<T> aClass, String sql, Object holderValue) {
+        return query(aClass, sql, Collections.singletonList(holderValue));
+    }
+
+    public static <T> Optional<List<T>> query(Connection connection, Class<T> aClass, String sql,
+                                              List<Object> holderValues) {
         var list = new ArrayList<T>();
-        try (final var cxn = getConnection();
-             final var stmt = cxn.prepareStatement(sql)) {
+        try (var stmt = connection.prepareStatement(sql)) {
             for (int i = 0; null != holderValues && i < holderValues.size(); i++) {
                 stmt.setObject(i + 1, holderValues.get(i));
             }
@@ -163,6 +176,11 @@ public final class JDBCUtils {
             e.printStackTrace();
         }
         return Optional.ofNullable(0 == list.size() ? null : list);
+    }
+
+    public static <T> Optional<List<T>> query(Connection connection, Class<T> aClass, String sql,
+                                              Object holderValue) {
+        return query(connection, aClass, sql, Collections.singletonList(holderValue));
     }
 
     private static <T> T getT(Class<T> aClass, java.sql.ResultSet resultSet)

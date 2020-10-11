@@ -4,8 +4,6 @@ import org.junit.jupiter.api.Test;
 
 import dao.impl.CustomerDAOImpl;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 /**
  * @author huzihao
  * @since 2020/10/11 22:55

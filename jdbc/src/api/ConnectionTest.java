@@ -10,7 +10,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
-import util.JDBCUtils;
+import util.DBUtils;
 
 /**
  * @author huzihao
@@ -96,7 +96,7 @@ public class ConnectionTest {
      */
     @Test
     public void testCxnUltimate() throws IOException, ClassNotFoundException, SQLException {
-        try (var cxn = JDBCUtils.getConnection()) {
+        try (var cxn = DBUtils.getConnection()) {
             System.out.println(cxn);
         }
     }

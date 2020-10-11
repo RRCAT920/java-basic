@@ -35,14 +35,14 @@ import java.util.Properties;
  * </ol>
  * @author huzihao
  * @since 2020/9/24 22:11
- * @see JDBCUtils#databaseFile
- * @see JDBCUtils#url
- * @see JDBCUtils#user
- * @see JDBCUtils#password
- * @see JDBCUtils#sql
- * @see JDBCUtils#holderValues
+ * @see DBUtils#databaseFile
+ * @see DBUtils#url
+ * @see DBUtils#user
+ * @see DBUtils#password
+ * @see DBUtils#sql
+ * @see DBUtils#holderValues
  */
-public final class JDBCUtils {
+public final class DBUtils {
     private static File databaseFile = new File("database.properties");
     private static String url;
     private static String user;
@@ -71,7 +71,7 @@ public final class JDBCUtils {
      * @param path 配置路径
      */
     public static void setPath(String path) {
-        JDBCUtils.databaseFile = new File(path);
+        DBUtils.databaseFile = new File(path);
         load();
     }
 
@@ -130,7 +130,7 @@ public final class JDBCUtils {
 
     /**
      * 基本查询
-     * @see JDBCUtils#query
+     * @see DBUtils#query
      * @return 表对应的Java类的一个对象
      */
     public static <T> Optional<List<T>> query(Class<T> aClass) {

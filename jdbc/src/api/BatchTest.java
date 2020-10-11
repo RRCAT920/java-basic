@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import util.JDBCUtils;
+import util.DBUtils;
 
 /**
  * @author huzihao
@@ -22,7 +22,7 @@ public class BatchTest {
     public void init() {
         count++;
         var sql = "truncate table goods";
-        try (var cxn = JDBCUtils.getConnection();
+        try (var cxn = DBUtils.getConnection();
              var stmt = cxn.prepareStatement(sql)) {
             stmt.execute();
         } catch (SQLException throwables) {
@@ -38,7 +38,7 @@ public class BatchTest {
     @Test
     public void level1() {
         var start = System.currentTimeMillis();
-        try (var cxn = JDBCUtils.getConnection();
+        try (var cxn = DBUtils.getConnection();
              var stmt = cxn.createStatement()) {
             for (var i = 0; i < TIMES; i++) {
                 var sql = """
@@ -61,7 +61,7 @@ public class BatchTest {
                 insert into goods(name)
                 values(?)
                 """;
-        try (var cxn = JDBCUtils.getConnection();
+        try (var cxn = DBUtils.getConnection();
              var stmt = cxn.prepareStatement(sql)) {
             for (var i = 0; i < TIMES; i++) {
                 stmt.setString(1, "name_" + i);
@@ -80,7 +80,7 @@ public class BatchTest {
                 insert into goods(name)
                 values(?)
                 """;
-        try (var cxn = JDBCUtils.getConnection();
+        try (var cxn = DBUtils.getConnection();
              var stmt = cxn.prepareStatement(sql)) {
             processBatch(stmt);
             time = System.currentTimeMillis() - start;
@@ -96,7 +96,7 @@ public class BatchTest {
                 insert into goods(name)
                 values(?)
                 """;
-        try (var cxn = JDBCUtils.getConnection();
+        try (var cxn = DBUtils.getConnection();
              var stmt = cxn.prepareStatement(sql)) {
             cxn.setAutoCommit(false);
             processBatch(stmt);

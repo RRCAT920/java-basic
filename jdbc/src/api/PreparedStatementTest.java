@@ -13,7 +13,7 @@ import java.util.Scanner;
 import pojo.Customer;
 import pojo.ExamStudent;
 import pojo.Order;
-import util.JDBCUtils;
+import util.DBUtils;
 import util.StringUtils;
 
 /**
@@ -32,7 +32,7 @@ public class PreparedStatementTest {
     @Test
     public void insert() {
         var sql = "insert into customers(name,email,birth) values(?,?,?)";
-        try (var cxn = JDBCUtils.getConnection();
+        try (var cxn = DBUtils.getConnection();
              var stmt = cxn.prepareStatement(sql)) {
             stmt.setString(1, "哪吒");
             stmt.setString(2, "nezha@gmail.com");
@@ -57,7 +57,7 @@ public class PreparedStatementTest {
     @Test
     public void update() {
         var sql = "update customers set name = ? where id = ?";
-        try (var cxn = JDBCUtils.getConnection();
+        try (var cxn = DBUtils.getConnection();
              var stmt = cxn.prepareStatement(sql)) {
             stmt.setObject(1, "莫扎特");
             stmt.setObject(2, 18);
@@ -70,19 +70,19 @@ public class PreparedStatementTest {
     @Test
     public void delete() {
         var sql = "delete from customers where id = ?";
-        JDBCUtils.execute(sql, Collections.singletonList(3));
+        DBUtils.execute(sql, Collections.singletonList(3));
     }
 
     @Test
     public void testNonMatch() {
         var sql = "update customers set name = ? where id = ?";
-        JDBCUtils.execute(sql, Collections.singletonList("莫扎特"));
+        DBUtils.execute(sql, Collections.singletonList("莫扎特"));
     }
 
     @Test
     public void specificQuery() {
         var sql = "select id, name, email, birth from customers where id = ?";
-        try (var cxn = JDBCUtils.getConnection();
+        try (var cxn = DBUtils.getConnection();
              var stmt = cxn.prepareStatement(sql)) {
             stmt.setInt(1, 1);
 
@@ -101,7 +101,7 @@ public class PreparedStatementTest {
 
     private static Customer queryForCustomer(String sql, List<Object> holders) {
         Customer customer = null;
-        try (var cxn = JDBCUtils.getConnection();
+        try (var cxn = DBUtils.getConnection();
              var stmt = cxn.prepareStatement(sql)) {
             for (int i = 0; i < holders.size(); i++) {
                 stmt.setObject(i + 1, holders.get(i));
@@ -148,7 +148,7 @@ public class PreparedStatementTest {
     public void sqlInject() {
         // 已经预编译，不能进行SQL注入
         var sql = "select user, password from user_table where user = ? and password = ?";
-        try (final var cxn = JDBCUtils.getConnection();
+        try (final var cxn = DBUtils.getConnection();
              final var stmt = cxn.prepareStatement(sql)) {
             stmt.setString(1, "1 or 1='");
             stmt.setString(2, "' or 1 = 1");
@@ -165,7 +165,7 @@ public class PreparedStatementTest {
     @Test
     public void testQuery() {
         var sql = "select id, name, email, birth from customers where id = ?";
-        System.out.println(JDBCUtils.query(Customer.class, sql, Collections.singletonList(1)));
+        System.out.println(DBUtils.query(Customer.class, sql, Collections.singletonList(1)));
     }
 
     /**
@@ -183,13 +183,13 @@ public class PreparedStatementTest {
     public void testQueryOrder() {
         var sql = "select order_id orderId,order_name orderName,order_date orderDate from `order`" +
                 " where order_id = ?";
-        System.out.println(JDBCUtils.query(Order.class, sql, Collections.singletonList(1)));
+        System.out.println(DBUtils.query(Order.class, sql, Collections.singletonList(1)));
     }
 
     @Test
     public void testNewJDBCUtils() {
-        JDBCUtils.setPath("database-test.properties");
-        final var customers = JDBCUtils.query(Customer.class);
+        DBUtils.setPath("database-test.properties");
+        final var customers = DBUtils.query(Customer.class);
         System.out.println(customers);
     }
 
@@ -208,7 +208,7 @@ public class PreparedStatementTest {
         System.out.print("请输入生日(YYYY MM dd)：");
         final var birth = Date.valueOf(LocalDate.of(in.nextInt(), in.nextInt(), in.nextInt()));
         var sql = "insert into customers(name, email, birth) values(?, ?, ?)";
-        JDBCUtils.execute(sql, Arrays.asList(name, email, birth));
+        DBUtils.execute(sql, Arrays.asList(name, email, birth));
     }
 
     public static void insertExamStudent() {
@@ -226,7 +226,7 @@ public class PreparedStatementTest {
         final var grade = in.nextInt();
         final var sql = "insert into exam_student(Type,IDCard,ExamCard,StudentName,Location,Grade)" +
                 " values(?,?,?,?,?,?)";
-        JDBCUtils.execute(sql, Arrays.asList(type, idCard, examCard, studentName, location, grade));
+        DBUtils.execute(sql, Arrays.asList(type, idCard, examCard, studentName, location, grade));
         System.out.println("信息录入成功！");
     }
 
@@ -251,7 +251,7 @@ public class PreparedStatementTest {
             }
         }
 
-        var students = JDBCUtils
+        var students = DBUtils
                 .query(ExamStudent.class, sql, Collections.singletonList(in.next()))
                 .orElse(null);
         if (null != students) {
@@ -273,11 +273,11 @@ public class PreparedStatementTest {
         System.out.println("请输入学生的考号：");
         var examCard = in.next();
         var querySql = "select FlowID flowId from exam_student where ExamCard = ?";
-        var students = JDBCUtils.query(ExamStudent.class, querySql,
+        var students = DBUtils.query(ExamStudent.class, querySql,
                 Collections.singletonList(examCard)).orElse(null);
         if (null != students) {
             var sql = "delete from exam_student where ExamCard = ?";
-            JDBCUtils.execute(sql, Collections.singletonList(examCard));
+            DBUtils.execute(sql, Collections.singletonList(examCard));
             System.out.println("删除成功!");
         } else {
             System.out.println("查无此人，请重新输入!");

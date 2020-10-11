@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import util.JDBCUtils;
+import util.DBUtils;
 
 /**
  * @author huzihao
@@ -16,7 +16,7 @@ public class TransactionTest {
     public void carryOver() {
         Connection cxn = null;
         try {
-            cxn = JDBCUtils.getConnection();
+            cxn = DBUtils.getConnection();
             cxn.setAutoCommit(false); // 同时取消DML和连接关闭的自动提交
             var sql1 = """
                     update user_table
@@ -28,11 +28,11 @@ public class TransactionTest {
                     set balance = balance + 100
                     where user = ?
                     """;
-            JDBCUtils.execute(cxn, sql1, "AA");
+            DBUtils.execute(cxn, sql1, "AA");
 
             System.out.println(Integer.valueOf("asfdasf"));
 
-            JDBCUtils.execute(cxn, sql2, "BB");
+            DBUtils.execute(cxn, sql2, "BB");
             cxn.commit();
         } catch (SQLException | NumberFormatException throwables) {
             if (null != cxn) {

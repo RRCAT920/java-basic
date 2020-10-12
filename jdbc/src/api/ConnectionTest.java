@@ -10,7 +10,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
-import util.DBUtils;
+import util_opt.DBUtils;
 
 /**
  * @author huzihao

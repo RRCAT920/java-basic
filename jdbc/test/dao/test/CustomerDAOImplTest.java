@@ -10,16 +10,17 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+import dao.CustomerDAO;
 import dao.impl.CustomerDAOImpl;
 import pojo.Customer;
-import util.DBUtils;
+import util_opt.DBUtils;
 
 /**
  * @author huzihao
  * @since 2020/10/11 22:55
  */
 class CustomerDAOImplTest {
-    private static final CustomerDAOImpl dao = new CustomerDAOImpl();
+    private static final CustomerDAO dao = new CustomerDAOImpl();
     private static Connection cxn;
 
     @BeforeAll

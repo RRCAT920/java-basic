@@ -9,7 +9,7 @@ import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
-import static util.DBUtils.getConnection;
+import static util_opt.DBUtils.getConnection;
 
 /**
  * @author huzihao

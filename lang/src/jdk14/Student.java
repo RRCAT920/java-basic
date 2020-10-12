@@ -9,7 +9,7 @@ public record Student(int id, String name) {
 
     public Student {
         number++;
-        this.id = number;
+//        this.id = number;
     }
 
     public Student(String name) {

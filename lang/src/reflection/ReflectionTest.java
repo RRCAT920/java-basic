@@ -193,7 +193,10 @@ public class ReflectionTest {
         System.out.println(paramType);
 
         var actualTypeArgs = paramType.getActualTypeArguments();
-        System.out.println(actualTypeArgs[0].getTypeName());
+        var arg = actualTypeArgs[0];
+        var classString = (Class<String>) arg;
+        System.out.println(classString);
+        System.out.println(arg.getTypeName());
     }
 
     /**

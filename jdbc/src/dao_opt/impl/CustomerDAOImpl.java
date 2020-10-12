@@ -2,12 +2,10 @@ package dao_opt.impl;
 
 import java.sql.Connection;
 import java.sql.Date;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
-import dao_opt.CustomerDAO;
 import dao_opt.BaseDAO;
+import dao_opt.CustomerDAO;
 import pojo.Customer;
 
 /**
@@ -21,14 +19,13 @@ public class CustomerDAOImpl extends BaseDAO<Customer> implements CustomerDAO {
                 insert into customers(name,email,birth)
                 values(?,?,?)
                 """;
-        update(connection, sql, 
-                Arrays.asList(customer.getName(), customer.getEmail(), customer.getBirth()));
+        update(connection, sql, customer.getName(), customer.getEmail(), customer.getBirth());
     }
 
     @Override
     public void deleteById(Connection connection, int id) {
         var sql = "delete from customers where id = ?";
-        update(connection, sql, Collections.singletonList(id));
+        update(connection, sql, id);
     }
 
     @Override
@@ -38,8 +35,7 @@ public class CustomerDAOImpl extends BaseDAO<Customer> implements CustomerDAO {
                 set name = ?, email = ?, birth = ?
                 where id = ?
                 """;
-        update(connection, sql, Arrays.asList(customer.getName(), customer.getEmail(),
-                customer.getBirth(), customer.getId()));
+        update(connection, sql, customer.getName(), customer.getEmail(), customer.getBirth(), customer.getId());
     }
 
     @Override
@@ -49,7 +45,7 @@ public class CustomerDAOImpl extends BaseDAO<Customer> implements CustomerDAO {
                 from customers
                 where id = ?
                 """;
-        return get(connection, sql, Collections.singletonList(id));
+        return get(connection, sql, id);
     }
 
     @Override
@@ -58,13 +54,13 @@ public class CustomerDAOImpl extends BaseDAO<Customer> implements CustomerDAO {
                 select id, name, email, birth
                 from customers
                 """;
-        return getList(connection, sql, null).orElse(null);
+        return getList(connection, sql).orElse(null);
     }
 
     @Override
     public Long getCount(Connection connection) {
         var sql = "select count(*) from customers";
-        return (Long) getValue(connection, sql, null);
+        return (Long) getValue(connection, sql);
     }
 
     @Override
@@ -73,6 +69,6 @@ public class CustomerDAOImpl extends BaseDAO<Customer> implements CustomerDAO {
                 select max(birth)
                 from customers
                 """;
-        return (Date) getValue(connection, sql, null);
+        return (Date) getValue(connection, sql);
     }
 }

@@ -14,7 +14,6 @@ import util_opt.DBUtils;
 class CustomerDAOImplTest {
     private static final CustomerDAO dao = new CustomerDAOImpl();
 
-
     @Test
     void getCustomerById() {
         try (var cxn = DBUtils.getConnection()) {

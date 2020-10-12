@@ -22,10 +22,10 @@ public abstract class BaseDAO<T> {
         aClass = (Class<T>) actualTypeArgs[0];
     }
 
-    public int update(Connection connection, String sql, List<Object> holderValues) {
+    public int update(Connection connection, String sql, Object... holderValues) {
         try (var stmt = connection.prepareStatement(sql)) {
-            for (int i = 0; i < holderValues.size(); i++) {
-                stmt.setObject(i + 1, holderValues.get(i));
+            for (int i = 0; i < holderValues.length; i++) {
+                stmt.setObject(i + 1, holderValues[0]);
             }
             return stmt.executeUpdate();
         } catch (SQLException throwables) {
@@ -34,19 +34,19 @@ public abstract class BaseDAO<T> {
         return 0;
     }
 
-    public Optional<List<T>> getList(Connection connection, String sql, List<Object> holderValues) {
+    public Optional<List<T>> getList(Connection connection, String sql, Object... holderValues) {
         return DBUtils.query(connection, aClass, sql, holderValues);
     }
 
-    public T get(Connection connection, String sql, List<Object> holderValues) {
+    public T get(Connection connection, String sql, Object... holderValues) {
         var list = DBUtils.query(connection, aClass, sql, holderValues).orElse(null);
         return null == list ? null : list.get(0);
     }
 
-    public Object getValue(Connection connection, String sql, List<Object> holderValues) {
+    public Object getValue(Connection connection, String sql, Object... holderValues) {
         try (var stmt = connection.prepareStatement(sql)) {
-            for (var i = 0; null != holderValues && i < holderValues.size(); i++) {
-                stmt.setObject(i + 1, holderValues.get(i));
+            for (var i = 0; i < holderValues.length; i++) {
+                stmt.setObject(i + 1, holderValues[0]);
             }
             try (var resultSet = stmt.executeQuery()) {
                 if (resultSet.next()) return resultSet.getObject(1);

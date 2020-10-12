@@ -206,4 +206,16 @@ public final class DBUtils {
     public static void main(String[] args) {
         System.out.println(getHolderValueList("1"));
     }
+
+    public static void closeResources(AutoCloseable... autoCloseables) {
+        for (var closeable : autoCloseables) {
+            if (null != closeable) {
+                try {
+                    closeable.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 }

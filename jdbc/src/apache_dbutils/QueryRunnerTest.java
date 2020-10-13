@@ -33,7 +33,19 @@ public class QueryRunnerTest {
         void handle();
     }
 
+    /**
+     * 过度设计的典型<p>
+     * 原想法是仅封装注释结构，但是灵机一动写了一个万能的异常处理机制，最后发现try语句已经是最佳实践了。
+     */
     public static class ExceptionCatcher {
+//        static void run(RunnableThrow runnableThrow) >{
+//            try {
+//                runnableThrow.run();
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        }
+
         public static void run(RunnableThrow runnableThrow, ExceptionHandler<?>... handlers) {
             try {
                 runnableThrow.run();
@@ -85,19 +97,19 @@ public class QueryRunnerTest {
                 }
             }, handler, aioobeHandler, npeHandler);
 
-            try {
-                switch (new Random().nextInt(3)) {
-                    case 0 -> throw new NullPointerException();
-                    case 1 -> throw new ArrayIndexOutOfBoundsException();
-                    default -> throw new Exception();
-                }
-            } catch (NullPointerException e) {
-                System.out.println("exception");
-            } catch (ArrayIndexOutOfBoundsException e) {
-                System.out.println("array index out of bounds");
-            } catch (Exception e) {
-                System.out.println("null");
-            }
+//            try {
+//                switch (new Random().nextInt(3)) {
+//                    case 0 -> throw new NullPointerException();
+//                    case 1 -> throw new ArrayIndexOutOfBoundsException();
+//                    default -> throw new Exception();
+//                }
+//            } catch (NullPointerException e) {
+//                System.out.println("exception");
+//            } catch (ArrayIndexOutOfBoundsException e) {
+//                System.out.println("array index out of bounds");
+//            } catch (Exception e) {
+//                System.out.println("null");
+//            }
         }
 
         @Test

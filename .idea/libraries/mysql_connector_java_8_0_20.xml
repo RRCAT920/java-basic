@@ -1,20 +1,9 @@
 <component name="libraryTable">
   <library name="mysql-connector-java-8.0.20">
     <CLASSES>
-      <root url="jar:///Applications/mysql-connector-java-8.0.20/mysql-connector-java-8.0.20.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/mysql-connector-java-8.0.20.jar!/" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES>
-      <root url="file:///Applications/mysql-connector-java-8.0.20/src/build/java" />
-      <root url="file:///Applications/mysql-connector-java-8.0.20/src/demo/java" />
-      <root url="file:///Applications/mysql-connector-java-8.0.20/src/generated/java" />
-      <root url="file:///Applications/mysql-connector-java-8.0.20/src/legacy/java" />
-      <root url="file:///Applications/mysql-connector-java-8.0.20/src/main/core-api/java" />
-      <root url="file:///Applications/mysql-connector-java-8.0.20/src/main/core-impl/java" />
-      <root url="file:///Applications/mysql-connector-java-8.0.20/src/main/protocol-impl/java" />
-      <root url="file:///Applications/mysql-connector-java-8.0.20/src/main/user-api/java" />
-      <root url="file:///Applications/mysql-connector-java-8.0.20/src/main/user-impl/java" />
-      <root url="file:///Applications/mysql-connector-java-8.0.20/src/test/java" />
-    </SOURCES>
+    <SOURCES />
   </library>
 </component>

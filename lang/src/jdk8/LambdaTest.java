@@ -37,6 +37,7 @@ public class LambdaTest {
         var intComp = (Comparator<Integer>) Integer::compare;
         System.out.println(intComp.compare(1, 2));
 
+        // 不安全的lambda写法
         var runnable = (Runnable) () -> {
             System.out.println("hello");
         };

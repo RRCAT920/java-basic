@@ -2,6 +2,7 @@ package apache_dbutils;
 
 import com.alibaba.druid.pool.DruidDataSourceFactory;
 
+import org.apache.commons.dbutils.DbUtils;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.ResultSetHandler;
 import org.apache.commons.dbutils.handlers.BeanHandler;
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Properties;
 import java.util.Random;
@@ -20,6 +22,7 @@ import java.util.Random;
 import javax.sql.DataSource;
 
 import pojo.Customer;
+import util.DBUtils;
 
 /**
  * @author huzihao
@@ -264,5 +267,25 @@ public class QueryRunnerTest {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+    }
+
+    @Test
+    void close() {
+        Connection cxn = null;
+        try {
+            cxn = DBUtils.getConnection();
+            // process
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } finally {
+            try {
+                DbUtils.close(cxn);
+//                DbUtils.closeQuietly(cxn);
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        }
+
     }
 }

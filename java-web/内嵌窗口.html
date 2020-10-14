@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>iframe</title>
+</head>
+<body>
+单独页面<br/><br/>
+<!--
+只能使用双标签
+和a一起使用的通用步骤：
+为iframe的name属性设置值
+为a的target属性设置name属性的值
+-->
+<iframe src="表格.html" width="300" height="300" name="target" frameborder="0"></iframe>
+
+<ul>
+    <li><a href="a.html" target="target">A</a></li>
+    <li><a href="font.html" target="target">B</a></li>
+    <li><a href="hello.html" target="target">C</a></li>
+</ul>
+</body>
+</html>

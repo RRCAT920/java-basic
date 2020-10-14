@@ -7,10 +7,12 @@ import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
 import org.apache.commons.dbutils.handlers.MapHandler;
 import org.apache.commons.dbutils.handlers.MapListHandler;
+import org.apache.commons.dbutils.handlers.ScalarHandler;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.sql.SQLException;
 import java.util.Properties;
 import java.util.Random;
 
@@ -231,5 +233,20 @@ public class QueryRunnerTest {
             var mapList = queryRunner.query(sql, mapListHandler, 22);
             System.out.println(mapList);
         });
+    }
+
+    @Test
+    void queryScalarHandler() {
+        try {
+            var sql = """
+                    select count(*)
+                    from customers
+                    """;
+            var scalarHandler = new ScalarHandler();
+            var count = (Long) queryRunner.query(sql, scalarHandler);
+            System.out.println(count);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
     }
 }

@@ -3,6 +3,7 @@ package apache_dbutils;
 import com.alibaba.druid.pool.DruidDataSourceFactory;
 
 import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.ResultSetHandler;
 import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
 import org.apache.commons.dbutils.handlers.MapHandler;
@@ -245,6 +246,21 @@ public class QueryRunnerTest {
             var scalarHandler = new ScalarHandler();
             var count = (Long) queryRunner.query(sql, scalarHandler);
             System.out.println(count);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
+    @Test
+    void queryUserDefinedHandler() {
+        try {
+            var sql = """
+                    select count(*)
+                    from customers
+                    """;
+            ResultSetHandler<Customer> userDefinedHandler = resultSet -> null;
+            var customer = queryRunner.query(sql, userDefinedHandler);
+            System.out.println(customer);
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }

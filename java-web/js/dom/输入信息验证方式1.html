@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>验证输入框内容是否合法：必须由字母、数字、下划线组成，且长度5-12位</title>
+    <style>
+        #userNameValidate {
+            color: red;
+            font-size: 13px;
+        }
+    </style>
+    <script>
+        window.onload = function () {
+            let btn = document.getElementById("validate")
+            let input = document.getElementById("userNameInput")
+            let span = document.getElementById("userNameValidate")
+            btn.onclick = function () {
+                let pattern = /^\w{5,12}$/
+                if (!pattern.test(input.value)) span.innerHTML = "用户名不合法"
+            }
+        }
+    </script>
+</head>
+<body>
+用户名：<input id="userNameInput" type="text"><span id="userNameValidate"></span>
+<br>
+<button id="validate">验证</button>
+</body>
+</html>

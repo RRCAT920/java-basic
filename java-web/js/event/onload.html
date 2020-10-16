@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>onload事件</title>
+    <script>
+        function windowOnload() {
+            alert("静态注册");
+        }
+
+        window.onload = function () {
+            alert("动态注册");
+        };
+    </script>
+</head>
+<body onload="windowOnload()">
+
+</body>
+</html>

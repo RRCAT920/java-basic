@@ -73,7 +73,34 @@ a:hover {
 <script type="text/javascript" src="script/jquery-1.7.2.js"></script>
 <script type="text/javascript">
 	$(function() {
+		// 1.点击按钮的时候，隐藏和显示卡西欧之后的品牌。
+		// 2.当显示全部内容的时候，按钮文本为“显示精简品牌” 然后，小三角形向上。所有品牌产品为默认颜色。
+		// 3.当只显示精简品牌的时候，要隐藏卡西欧之后的品牌，按钮文本为“显示全部品牌” 然后小三形向下。并且把 佳能，尼康的品牌颜色改为红色（给 li 标签添加 promoted 样式即可）
+		let $category = $("li:gt(5):not(:last)")
+		$category.hide()
+		let $promotedCategory = $("li").filter(":contains('佳能'), :contains('尼康'), :contains('奥林巴斯')")
 
+		$(".showmore a").click(function () {
+			$category.toggle()
+			let text
+			let showClass
+			if ($category.is(":hidden")) {
+				$promotedCategory.removeClass("promoted")
+				text = "显示全部品牌"
+				showClass = "showmore"
+			} else {
+				$promotedCategory.addClass("promoted")
+				text = "显示精简品牌"
+				showClass = "showless"
+			}
+			$(".showmore a span")
+					.text(text)
+					.parent()
+					.parent()
+					.removeClass()
+					.addClass(showClass)
+			return false
+		})
 	});
 </script>
 </head>

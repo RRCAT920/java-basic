@@ -29,142 +29,145 @@
 		<script type="text/javascript" src="../script/jquery-1.7.2.js"></script>
 		<script type="text/javascript">
 			$(document).ready(function(){
-				function anmateIt(){
+				function anmateIt() {
 					$("#mover").slideToggle("slow", anmateIt);
 				}
+
 				anmateIt();
-				
-	/**
-					
-	过滤
-	eq(index|-index) 			
-	first() 					
-	last() 						
-	hasClass(class) 			
-	filter(expr|obj|ele|fn) 	
-	is(expr|obj|ele|fn)1.6* 	
-	has(expr|ele) 				
-	not(expr|ele|fn) 			
-	slice(start,[end]) 			
-	
-	查找
-	children([expr]) 			
-	closest(expr,[con]|obj|ele)1.6*   
-	find(expr|obj|ele) 				
-	next([expr]) 					
-	nextall([expr]) 				
-	nextUntil([exp|ele][,fil])1.6* 	
-	parent([expr]) 					
-	parents([expr]) 				
-	parentsUntil([exp|ele][,fil])1.6*  
-	prev([expr]) 					
-	prevall([expr]) 				
-	prevUntil([exp|ele][,fil])1.6* 	
-	siblings([expr]) 				
-	
-	串联
-	add(expr|ele|html|obj[,con]) 	
-							
-	
-	*/
-				
+
+				/**
+
+				 过滤
+				 eq(index|-index)
+				 first()
+				 last()
+				 hasClass(class)
+				 filter(expr|obj|ele|fn)
+				 is(expr|obj|ele|fn)1.6*
+				 has(expr|ele)
+				 not(expr|ele|fn)
+				 slice(start,[end])
+
+				 查找
+				 children([expr])
+				 closest(expr,[con]|obj|ele)1.6*
+				 find(expr|obj|ele)
+				 next([expr])
+				 nextall([expr])
+				 nextUntil([exp|ele][,fil])1.6*
+				 parent([expr])
+				 parents([expr])
+				 parentsUntil([exp|ele][,fil])1.6*
+				 prev([expr])
+				 prevall([expr])
+				 prevUntil([exp|ele][,fil])1.6*
+				 siblings([expr])
+
+				 串联
+				 add(expr|ele|html|obj[,con])
+
+
+				 */
+
 				//(1)eq()  选择索引值为等于 3 的 div 元素
-				$("#btn1").click(function(){
-					$().css("background-color","#bfa");
+				$("#btn1").click(function () {
+					$("div").eq(3).css("background-color", "#bfa");
 				});
 				//(2)first()选择第一个 div 元素
-				 $("#btn2").click(function(){
-					 //first()   选取第一个元素
-					$().css("background-color","#bfa");
+				$("#btn2").click(function () {
+					//first()   选取第一个元素
+					$("div").first().css("background-color", "#bfa");
 				});
 				//(3)last()选择最后一个 div 元素
-				$("#btn3").click(function(){
+				$("#btn3").click(function () {
 					//last()  选取最后一个元素
-					$().css("background-color","#bfa");
+					$("div").last().css("background-color", "#bfa");
 				});
 				//(4)filter()在div中选择索引为偶数的
-				$("#btn4").click(function(){
+				$("#btn4").click(function () {
 					//filter()  过滤   传入的是选择器字符串
-					$().css("background-color","#bfa");
+					$("div").filter(":even").css("background-color", "#bfa");
 				});
-				 //(5)is()判断#one是否为:empty或:parent
+				//(5)is()判断#one是否为:empty或:parent
 				//is用来检测jq对象是否符合指定的选择器
-				$("#btn5").click(function(){
-
+				$("#btn5").click(function () {
+					let $one = $("#one")
+					alert($one.is(":empty"))
+					alert($one.is(":parent"))
 				});
-				
+
 				//(6)has()选择div中包含.mini的
-				$("#btn6").click(function(){
+				$("#btn6").click(function () {
 					//has(selector)  选择器字符串    是否包含selector
-					$().css("background-color","#bfa");
+					$("div").has(".mini").css("background-color", "#bfa");
 				});
 				//(7)not()选择div中class不为one的
-				$("#btn7").click(function(){
+				$("#btn7").click(function () {
 					//not(selector)  选择不是selector的元素
-					$().css("background-color","#bfa");
+					$("div").not(".one").css("background-color", "#bfa");
 				});
 				//(8)children()在body中选择所有class为one的div子元素
-				$("#btn8").click(function(){
+				$("#btn8").click(function () {
 					//children()  选出所有的子元素
-					$().css("background-color","#bfa");
+					$("body").children("div.one").css("background-color", "#bfa");
 				});
-				
-				
+
+
 				//(9)find()在body中选择所有class为mini的div元素
-				$("#btn9").click(function(){
+				$("#btn9").click(function () {
 					//find()  选出所有的后代元素
-					$().css("background-color","#bfa");
+					$("body").find("div.mini").css("background-color", "#bfa");
 				});
 				//(10)next() #one的下一个div
-				$("#btn10").click(function(){
+				$("#btn10").click(function () {
 					//next()  选择下一个兄弟元素
-					$().css("background-color","#bfa");
+					$("#one").next("div").css("background-color", "#bfa");
 				});
 				//(11)nextAll() #one后面所有的span元素
-				$("#btn11").click(function(){
+				$("#btn11").click(function () {
 					//nextAll()   选出后面所有的元素
-					$().css("background-color","#bfa");
+					$("#one").nextAll("span").css("background-color", "#bfa");
 				});
 				//(12)nextUntil() #one和span之间的元素
-				$("#btn12").click(function(){
+				$("#btn12").click(function () {
 					//
-					$().css("background-color","#bfa")
+					$("#one").nextUntil("span").css("background-color", "#bfa")
 				});
 				//(13)parent() .mini的父元素
-				$("#btn13").click(function(){
-					$().css("background-color","#bfa");
+				$("#btn13").click(function () {
+					$(".mini").parent().css("background-color", "#bfa");
 				});
 				//(14)prev() #two的上一个div
-				$("#btn14").click(function(){
+				$("#btn14").click(function () {
 					//prev()  
-					$().css("background-color","#bfa")
+					$("#two").prev("div").css("background-color", "#bfa")
 				});
 				//(15)prevAll() span前面所有的div
-				$("#btn15").click(function(){
+				$("#btn15").click(function () {
 					//prevAll()   选出前面所有的元素
-					$().css("background-color","#bfa")
+					$("span").prevAll("div").css("background-color", "#bfa")
 				});
 				//(16)prevUntil() span向前直到#one的元素
-				$("#btn16").click(function(){
+				$("#btn16").click(function () {
 					//prevUntil(exp)   找到之前所有的兄弟元素直到找到exp停止
-					$().css("background-color","#bfa")
+					$("span").prevUntil("#one").css("background-color", "#bfa")
 				});
 				//(17)siblings() #two的所有兄弟元素
-				$("#btn17").click(function(){
+				$("#btn17").click(function () {
 					//siblings()    找到所有的兄弟元素，包括前面的和后面的
-					$().css("background-color","#bfa")
+					$("#two").siblings().css("background-color", "#bfa")
 				});
-				
-				
+
+
 				//(18)add()选择所有的 span 元素和id为two的元素
-				$("#btn18").click(function(){
-	
+				$("#btn18").click(function () {
+
+					$("span").add("#two").css("background-color", "#bfa")
 					//   $("span,#two,.mini,#one")
-					$("span").add("#two")
-							.add(".mini").add("#one").css("background-color","#bfa");
-					
+					// $("span").add("#two")
+					// 		.add(".mini").add("#one").css("background-color", "#bfa");
+
 				});
-				
 
 
 			});

@@ -17,9 +17,36 @@
 	</style>
 	<script type="text/javascript" src="script/jquery-1.7.2.js"></script>
 	<script type="text/javascript">
-		
-		
-	
+		$(function () {
+			let $leftButtons = $("#left button")
+			let $rightButtons = $("#rigth button")
+			let $select1 = $("select[name='sel01']")
+			let $select2 = $("select[name='sel02']")
+
+			function transferSelected(from, to) {
+				from.children().filter(":selected").appendTo(to)
+			}
+
+			function transfer(from, to) {
+				from.children().appendTo(to)
+			}
+
+			$leftButtons.eq(0).click(function () {
+				transferSelected($select1, $select2)
+			})
+
+			$leftButtons.eq(1).click(function () {
+				transfer($select1, $select2)
+			})
+
+			$rightButtons.eq(0).click(function () {
+				transferSelected($select2, $select1)
+			})
+
+			$rightButtons.eq(1).click(function () {
+				transfer($select2, $select1)
+			})
+		})
 	</script>
 </head>
 <body>

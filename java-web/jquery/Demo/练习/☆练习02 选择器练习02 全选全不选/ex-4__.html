@@ -7,8 +7,41 @@
 <script type="text/javascript">
 	
 	$(function(){
-		
-		
+		let $checkboxes = $(":checkbox")
+		let $items = $(":checkbox[name='items']")
+
+		$("#checkedAllBtn").click(function () {
+			$checkboxes.prop("checked", true)
+		})
+
+		$("#checkedNoBtn").click(function () {
+			$checkboxes.prop("checked", false)
+		})
+
+		$("#checkedRevBtn").click(function () {
+			$items.each(function () {
+				this.checked = !this.checked
+			})
+			// 判断是否全选
+			let countChecked = $items.filter(":checked").length
+			$("#checkedAllBox").prop("checked", countChecked === $items.length)
+		})
+
+		$("#sendBtn").click(function () {
+			$items.filter(":checked").each(function () {
+				alert(this.value)
+			})
+		})
+
+		// 同步全选复选框的操作
+		let $checkedAllBox = $("#checkedAllBox")
+		$checkedAllBox.click(function () {
+			$items.prop("checked", this.checked)
+		})
+		// 同步items的操作
+		$items.click(function () {
+			$checkedAllBox.prop("checked", $items.filter(":checked").length === $items.length)
+		})
 	});
 	
 </script>

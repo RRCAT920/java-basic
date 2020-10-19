@@ -82,18 +82,17 @@ a:hover {
 
 		$(".showmore a").click(function () {
 			$category.toggle()
+			$promotedCategory.toggleClass("promoted")
 			let text
 			let showClass
 			if ($category.is(":hidden")) {
-				$promotedCategory.removeClass("promoted")
 				text = "显示全部品牌"
 				showClass = "showmore"
 			} else {
-				$promotedCategory.addClass("promoted")
 				text = "显示精简品牌"
 				showClass = "showless"
 			}
-			$(".showmore a span")
+			$(this).children()
 					.text(text)
 					.parent()
 					.parent()

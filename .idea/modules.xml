@@ -4,7 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/design-pattern/design-pattern.iml" filepath="$PROJECT_DIR$/design-pattern/design-pattern.iml" />
       <module fileurl="file://$PROJECT_DIR$/java-basic.iml" filepath="$PROJECT_DIR$/java-basic.iml" />
-      <module fileurl="file://$PROJECT_DIR$/java-web/java-web.iml" filepath="$PROJECT_DIR$/java-web/java-web.iml" />
+      <module fileurl="file://$PROJECT_DIR$/java-web-front/java-web-front.iml" filepath="$PROJECT_DIR$/java-web-front/java-web-front.iml" />
       <module fileurl="file://$PROJECT_DIR$/jdbc/jdbc.iml" filepath="$PROJECT_DIR$/jdbc/jdbc.iml" />
       <module fileurl="file://$PROJECT_DIR$/jdk15/jdk15.iml" filepath="$PROJECT_DIR$/jdk15/jdk15.iml" />
       <module fileurl="file://$PROJECT_DIR$/lang/lang.iml" filepath="$PROJECT_DIR$/lang/lang.iml" />

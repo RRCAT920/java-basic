@@ -1,34 +1,49 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
-<style type="text/css">
-	body {
-		text-align: center;
-	}
-	#small {
-		margin-top: 150px;
-	}
-	#showBig {
-		position: absolute;
-		display: none;
-	}
-</style>
-<script type="text/javascript" src="script/jquery-1.7.2.js"></script>
-<script type="text/javascript">
-	$(function(){
-		
-	});
-</script>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Insert title here</title>
+    <style type="text/css">
+        body {
+            text-align: center;
+        }
+
+        #small {
+            margin-top: 150px;
+        }
+
+        #showBig {
+            position: absolute;
+            display: none;
+        }
+    </style>
+    <script type="text/javascript" src="script/jquery-1.7.2.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            let $showBig = $("#showBig")
+
+            $("#small")
+                .mouseout(function () {
+                    $showBig.hide()
+                })
+                .bind("mouseover mousemove", function (mouseEvent) {
+                    $showBig.show()
+                        .offset({
+                            left: mouseEvent.pageX + 10,
+                            top: mouseEvent.pageY + 10
+                        })
+                })
+        });
+    </script>
 </head>
 <body>
 
-	<img id="small" src="img/small.jpg" />
-	
-	<div id="showBig">
-		<img src="img/big.jpg">
-	</div>
+<img id="small" src="img/small.jpg"/>
+
+<div id="showBig">
+    <img src="img/big.jpg">
+</div>
 
 </body>
 </html>

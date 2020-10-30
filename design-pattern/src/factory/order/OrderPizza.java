@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 import factory.pizza.CheesePizza;
 import factory.pizza.GreekPizza;
+import factory.pizza.PepperPizza;
 import factory.pizza.Pizza;
 
 /**
@@ -19,12 +20,9 @@ public class OrderPizza {
             Pizza pizza;
             var type = getType();
             switch (type.toLowerCase()) {
-                case "greek" -> {
-                    pizza = new GreekPizza();
-                }
-                case "cheese" -> {
-                    pizza = new CheesePizza();
-                }
+                case "greek" -> pizza = new GreekPizza();
+                case "cheese" -> pizza = new CheesePizza();
+                case "pepper" -> pizza = new PepperPizza();
                 default -> {
                     break label;
                 }

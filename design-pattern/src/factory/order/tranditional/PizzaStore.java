@@ -1,4 +1,4 @@
-package factory.tranditional_order;
+package factory.order.tranditional;
 
 import java.util.Scanner;
 
@@ -14,7 +14,6 @@ import factory.pizza.Pizza;
  * @since 2020/10/30 20:02
  */
 public class PizzaStore {
-    private static final Scanner scanner = new Scanner(System.in);
 
     public Pizza orderPizza(String type) {
         Pizza pizza = null;
@@ -34,10 +33,11 @@ public class PizzaStore {
     }
 
     public static void main(String[] args) {
+        var in = new Scanner(System.in);
         var pizzaStore = new PizzaStore();
         while (true) {
             System.out.print("你要的披萨类型：");
-            var type = scanner.nextLine();
+            var type = in.nextLine();
             var pizza = pizzaStore.orderPizza(type);
             if (null == pizza) break;
             System.out.println(pizza);

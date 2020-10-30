@@ -5,8 +5,7 @@ package factory.pizza;
  * @since 2020/10/30 17:38
  */
 public class CheesePizza extends Pizza {
-    @Override
-    public void prepare() {
-        System.out.println("准备芝士披萨");
+    public CheesePizza() {
+        setName("芝士披萨");
     }
 }

@@ -21,11 +21,9 @@ public class OrderPizza {
             switch (type.toLowerCase()) {
                 case "greek" -> {
                     pizza = new GreekPizza();
-                    pizza.setName("希腊披萨");
                 }
                 case "cheese" -> {
                     pizza = new CheesePizza();
-                    pizza.setName("芝士披萨");
                 }
                 default -> {
                     break label;

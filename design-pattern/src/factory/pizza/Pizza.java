@@ -7,7 +7,9 @@ package factory.pizza;
 public abstract class Pizza {
     protected String name;
 
-    public abstract void prepare();
+    public void prepare() {
+        System.out.println(name + " preparing");
+    }
 
     public void bake() {
         System.out.println(name + " baking");

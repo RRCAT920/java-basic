@@ -1,4 +1,4 @@
-package factory.order.simple_factory;
+package factory.order.simple_factory.sinlgeton;
 
 import java.util.Scanner;
 

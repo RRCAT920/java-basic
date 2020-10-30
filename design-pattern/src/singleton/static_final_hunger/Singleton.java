@@ -18,11 +18,6 @@ public class Singleton {
         return SINGLETON;
     }
 
-    @Override
-    public String toString() {
-        return "This is singleton class.";
-    }
-
     public static void main(String[] args) {
         var singleton1 = Singleton.getInstance();
         var singleton2 = Singleton.getInstance();

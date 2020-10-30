@@ -1,4 +1,4 @@
-package singleton;
+package singleton.static_final_hunger;
 
 /**
  * @author huzihao
@@ -10,7 +10,8 @@ public class Singleton {
      */
     private Singleton() {
     }
-    
+
+    // 静态常量饿汉式
     private static final Singleton SINGLETON = new Singleton();
 
     public static Singleton getInstance() {
@@ -20,5 +21,12 @@ public class Singleton {
     @Override
     public String toString() {
         return "This is singleton class.";
+    }
+
+    public static void main(String[] args) {
+        var singleton1 = Singleton.getInstance();
+        var singleton2 = Singleton.getInstance();
+        //noinspection ConstantConditions
+        assert singleton1 == singleton2;
     }
 }

@@ -1,5 +1,6 @@
 import org.junit.Test;
-import singleton.Singleton;
+
+import singleton.static_final_hunger.Singleton;
 
 /**
  * @author huzihao

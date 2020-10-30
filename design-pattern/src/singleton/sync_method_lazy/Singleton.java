@@ -5,7 +5,7 @@ package singleton.sync_method_lazy;
  * @since 2020/10/30 16:28
  */
 public class Singleton {
-    private static Singleton instance;
+    private static volatile Singleton instance;
 
     /**
      * Don't let anyone instantiate this class

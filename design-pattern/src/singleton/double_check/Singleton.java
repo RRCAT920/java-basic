@@ -5,7 +5,7 @@ package singleton.double_check;
  * @since 2020/10/30 16:46
  */
 public class Singleton {
-    private static Singleton instance;
+    private static volatile Singleton instance;
 
     /**
      * Don't let anyone instantiate this class

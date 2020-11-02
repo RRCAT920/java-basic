@@ -11,5 +11,8 @@ public class Client {
         System.out.println("--------------------");
         soybeanMilk = new PeanutSoybeanMilk();
         soybeanMilk.make();
+        System.out.println("--------------------");
+        soybeanMilk = new PureSoybeanMilk();
+        soybeanMilk.make();
     }
 }

@@ -11,7 +11,7 @@ public abstract class SoybeanMilk {
      */
     public final void make() {
         select();
-        addCondiments();
+        if (wantCondiments()) addCondiments();
         soak();
         stir();
     }
@@ -28,5 +28,14 @@ public abstract class SoybeanMilk {
 
     private void stir() {
         System.out.println("4.搅拌");
+    }
+
+    /**
+     * 钩子方法
+     *
+     * @return true/false
+     */
+    protected boolean wantCondiments() {
+        return true;
     }
 }

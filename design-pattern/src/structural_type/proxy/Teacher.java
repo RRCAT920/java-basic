@@ -1,4 +1,4 @@
-package structural_type.proxy.static_proxy;
+package structural_type.proxy;
 
 /**
  * @author huzihao

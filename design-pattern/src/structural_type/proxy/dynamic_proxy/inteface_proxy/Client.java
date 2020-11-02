@@ -1,4 +1,4 @@
-package structural_type.proxy.dynamic_proxy.jdk;
+package structural_type.proxy.dynamic_proxy.inteface_proxy;
 
 import structural_type.proxy.MathTeacher;
 import structural_type.proxy.Teacher;

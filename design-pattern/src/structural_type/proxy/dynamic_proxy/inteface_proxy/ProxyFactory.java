@@ -1,4 +1,4 @@
-package structural_type.proxy.dynamic_proxy.jdk;
+package structural_type.proxy.dynamic_proxy.inteface_proxy;
 
 import java.lang.reflect.Proxy;
 

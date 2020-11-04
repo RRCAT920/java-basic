@@ -12,6 +12,7 @@ public class UserImpl extends User {
     @Override
     public void send(String msg) {
         System.out.println(name + ": Sending Message=" + msg);
+        // 通过所属中介者发送消息给其他用户
         chatMediator.sendMessage(msg, this);
     }
 

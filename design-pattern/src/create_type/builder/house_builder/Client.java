@@ -1,4 +1,4 @@
-package create_type.builder.builder;
+package create_type.builder.house_builder;
 
 /**
  * @author huzihao
@@ -8,10 +8,13 @@ public class Client {
     public static void main(String[] args) {
         var commonHouseBuilder = new CommonHouseBuilder();
         var houseDirector = new HouseDirector(commonHouseBuilder);
-        houseDirector.construct();
+        var house = houseDirector.construct();
+        System.out.println(house);
+
         System.out.println("-----------");
         var highHouseBuilder = new HighHouseBuilder();
         houseDirector = new HouseDirector(highHouseBuilder);
-        houseDirector.construct();
+        house = houseDirector.construct();
+        System.out.println(house);
     }
 }

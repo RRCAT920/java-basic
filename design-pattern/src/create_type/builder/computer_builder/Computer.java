@@ -1,4 +1,4 @@
-package create_type.builder.builder.computer_builder;
+package create_type.builder.computer_builder;
 
 /**
  * @author huzihao

@@ -1,4 +1,4 @@
-package create_type.builder.builder;
+package create_type.builder.house_builder;
 
 /**
  * @author huzihao
@@ -7,16 +7,16 @@ package create_type.builder.builder;
 public class HighHouseBuilder extends HouseBuilder {
     @Override
     public void layFoundation() {
-        System.out.println("高级地基");
+        house.setFoundation("高级地基");
     }
 
     @Override
     public void buildWalls() {
-        System.out.println("高级墙");
+        house.setWalls("高级墙");
     }
 
     @Override
     public void cap() {
-        System.out.println("高级屋顶");
+        house.setRoof("高级屋顶");
     }
 }

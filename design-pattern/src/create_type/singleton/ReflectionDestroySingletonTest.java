@@ -14,7 +14,7 @@ public class ReflectionDestroySingletonTest {
             var inst2 = ctor.newInstance();
             var inst1 = BillPughSingleton.getInstance();
 
-            assert inst1 != inst2;
+            assert inst1.hashCode() != inst2.hashCode();
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
                 NoSuchMethodException e) {
             e.printStackTrace();

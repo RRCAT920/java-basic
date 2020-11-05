@@ -1,4 +1,4 @@
-package create_type.factory.order.factory_method;
+package create_type.factory.order.factory_method.pizza_store;
 
 import create_type.factory.pizza.Pizza;
 

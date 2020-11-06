@@ -1,9 +1,10 @@
-package structural_type.adapter.std;
+package structural_type.adapter;
 
 import org.junit.Test;
 
-import structural_type.adapter.SocketAdapter;
-import structural_type.adapter.Volt;
+import structural_type.adapter.std.SocketClassAdapterImpl;
+import structural_type.adapter.std.SocketInterfaceAdapterImpl;
+import structural_type.adapter.std.SocketObjectAdapterImpl;
 
 /**
  * @author huzihao
@@ -20,6 +21,12 @@ public class AdapterPatternTest {
     public void testObjectAdapter() {
         var socketObjectAdapter = new SocketObjectAdapterImpl();
         print(socketObjectAdapter);
+    }
+
+    @Test
+    public void testInterfaceAdapter() {
+        var socketInterfaceAdapter = new SocketInterfaceAdapterImpl();
+        print(socketInterfaceAdapter);
     }
 
     private void print(SocketAdapter adapter) {

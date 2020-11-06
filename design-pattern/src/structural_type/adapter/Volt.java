@@ -14,4 +14,6 @@ public class Volt {
     public Volt(int volts) {
         this.volts = volts;
     }
+
+    public static final Volt EMPTY_VOLT = new Volt(0);
 }

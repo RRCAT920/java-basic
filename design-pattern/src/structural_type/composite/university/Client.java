@@ -1,4 +1,4 @@
-package structural_type.composite;
+package structural_type.composite.university;
 
 /**
  * @author huzihao

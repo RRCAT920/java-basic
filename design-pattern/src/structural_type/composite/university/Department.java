@@ -1,4 +1,4 @@
-package structural_type.composite;
+package structural_type.composite.university;
 
 /**
  * @author huzihao
@@ -10,7 +10,7 @@ public class Department extends Organization {
     }
 
     @Override
-    protected void print() {
+    public void print() {
         System.out.println(getName());
     }
 }

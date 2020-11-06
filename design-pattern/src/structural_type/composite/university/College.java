@@ -1,4 +1,4 @@
-package structural_type.composite;
+package structural_type.composite.university;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,18 +15,18 @@ public class College extends Organization {
     }
 
     @Override
-    protected void print() {
+    public void print() {
         System.out.printf("----%s----%n", getName());
         organizationList.forEach(Organization::print);
     }
 
     @Override
-    protected void add(Organization organization) {
+    public void add(Organization organization) {
         organizationList.add(organization);
     }
 
     @Override
-    protected void remove(Organization organization) {
+    public void remove(Organization organization) {
         organizationList.remove(organization);
     }
 }

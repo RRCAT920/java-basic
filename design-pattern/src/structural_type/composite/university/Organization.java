@@ -1,4 +1,4 @@
-package structural_type.composite;
+package structural_type.composite.university;
 
 /**
  * @author huzihao
@@ -7,7 +7,7 @@ package structural_type.composite;
 public abstract class Organization {
     private final String name;
 
-    public Organization(String name) {
+    protected Organization(String name) {
         this.name = name;
     }
 
@@ -15,13 +15,13 @@ public abstract class Organization {
         return name;
     }
 
-    protected void add(Organization organization) {
+    public void add(Organization organization) {
         throw new UnsupportedOperationException();
     }
 
-    protected void remove(Organization organization) {
+    public void remove(Organization organization) {
         throw new UnsupportedOperationException();
     }
 
-    protected abstract void print();
+    public abstract void print();
 }

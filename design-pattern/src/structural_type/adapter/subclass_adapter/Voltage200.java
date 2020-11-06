@@ -1,4 +1,4 @@
-package structural_type.adapter.object_adapter;
+package structural_type.adapter.subclass_adapter;
 
 /**
  * @author huzihao

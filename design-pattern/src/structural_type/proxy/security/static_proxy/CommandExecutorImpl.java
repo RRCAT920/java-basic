@@ -1,4 +1,4 @@
-package structural_type.proxy.security;
+package structural_type.proxy.security.static_proxy;
 
 import java.io.IOException;
 

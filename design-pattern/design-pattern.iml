@@ -21,34 +21,6 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="module-library">
-      <library name="cglib-3.3.0">
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/src/structural_type/proxy/dynamic_proxy/subclass_proxy/lib/cglib-3.3.0.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES>
-          <root url="file://$MODULE_DIR$/src/structural_type/proxy/dynamic_proxy/subclass_proxy/lib/cglib-RELEASE_3_3_0/cglib-integration-test/src/test/java" />
-          <root url="file://$MODULE_DIR$/src/structural_type/proxy/dynamic_proxy/subclass_proxy/lib/cglib-RELEASE_3_3_0/cglib-jmh/src/main/java" />
-          <root url="file://$MODULE_DIR$/src/structural_type/proxy/dynamic_proxy/subclass_proxy/lib/cglib-RELEASE_3_3_0/cglib-sample/src/main/java" />
-          <root url="file://$MODULE_DIR$/src/structural_type/proxy/dynamic_proxy/subclass_proxy/lib/cglib-RELEASE_3_3_0/cglib/src/main/java" />
-          <root url="file://$MODULE_DIR$/src/structural_type/proxy/dynamic_proxy/subclass_proxy/lib/cglib-RELEASE_3_3_0/cglib/src/test/java" />
-          <root url="file://$USER_HOME$/Downloads/cglib-RELEASE_3_3_0/cglib-integration-test/src/test/java" />
-          <root url="file://$USER_HOME$/Downloads/cglib-RELEASE_3_3_0/cglib-jmh/src/main/java" />
-          <root url="file://$USER_HOME$/Downloads/cglib-RELEASE_3_3_0/cglib-sample/src/main/java" />
-          <root url="file://$USER_HOME$/Downloads/cglib-RELEASE_3_3_0/cglib/src/main/java" />
-          <root url="file://$USER_HOME$/Downloads/cglib-RELEASE_3_3_0/cglib/src/test/java" />
-        </SOURCES>
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library name="cglib-nodep-3.3.0">
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/src/structural_type/proxy/dynamic_proxy/subclass_proxy/lib/cglib-nodep-3.3.0.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
+    <orderEntry type="library" name="cglib-nodep-3.3.0" level="project" />
   </component>
 </module>

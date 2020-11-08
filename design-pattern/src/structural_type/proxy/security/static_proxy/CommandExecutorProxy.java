@@ -1,4 +1,4 @@
-package structural_type.proxy.security;
+package structural_type.proxy.security.static_proxy;
 
 /**
  * @author huzihao
@@ -6,7 +6,7 @@ package structural_type.proxy.security;
  */
 public class CommandExecutorProxy implements CommandExecutor {
     private boolean isAdmin;
-    private CommandExecutor executor = new CommandExecutorImpl();
+    private final CommandExecutor executor = new CommandExecutorImpl();
 
     public CommandExecutorProxy(String username, String password) {
         if ("admin".equals(username) && "root".equals(password)) {

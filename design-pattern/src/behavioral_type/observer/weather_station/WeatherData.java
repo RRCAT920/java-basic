@@ -1,4 +1,4 @@
-package behavioral_type.observer;
+package behavioral_type.observer.weather_station;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,16 +31,11 @@ public class WeatherData implements Subject {
     public void notifyObservers() {
         observerList.forEach(observer -> observer.update(temperature, humidity, pressure));
     }
-
-    public void measurementsChanged() {
-        // 当从气象站得到更新数据时，通知观察者
-        notifyObservers();
-    }
-
+    
     public void setMeasurements(float temperature, float humidity, float pressure) {
         this.temperature = temperature;
         this.humidity = humidity;
         this.pressure = pressure;
-        measurementsChanged();
+        notifyObservers();
     }
 }

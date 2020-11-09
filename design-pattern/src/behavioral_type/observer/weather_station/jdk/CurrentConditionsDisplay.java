@@ -1,9 +1,9 @@
-package behavioral_type.observer.jdk;
+package behavioral_type.observer.weather_station.jdk;
 
 import java.util.Observable;
 import java.util.Observer;
 
-import behavioral_type.observer.DisplayElement;
+import behavioral_type.observer.weather_station.DisplayElement;
 
 /**
  * @author huzihao

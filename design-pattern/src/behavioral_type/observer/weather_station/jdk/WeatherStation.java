@@ -1,4 +1,4 @@
-package behavioral_type.observer;
+package behavioral_type.observer.weather_station.jdk;
 
 /**
  * @author huzihao

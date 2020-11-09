@@ -1,4 +1,4 @@
-package behavioral_type.observer;
+package behavioral_type.observer.weather_station;
 
 /**
  * 所有的观察者都要实现此接口，这个接口只有一个update方法，当主题状态改变时被调用

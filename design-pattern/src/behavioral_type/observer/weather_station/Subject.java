@@ -1,4 +1,4 @@
-package behavioral_type.observer;
+package behavioral_type.observer.weather_station;
 
 /**
  * 主题接口，对象使用此接口注册为观察者，或者把自己从观察者中删除。每个主题都可以有很多观察者

@@ -11,7 +11,7 @@ public class CommandExecutorProxy {
     public static Object getProxy(Object target, String username, String password) {
         boolean isAdmin = "admin".equals(username) && "root".equals(password);
 
-        return Proxy.newProxyInstance(target.getClass().getClassLoader(),
+        return Proxy.newProxyInstance(CommandExecutorProxy.class.getClassLoader(),
                 target.getClass().getInterfaces(), (proxy, method, args) -> {
                     if (!isAdmin && args[0].toString().strip().startsWith("rm")) {
                         throw new Exception("rm command is not allowed for non-admin users.");

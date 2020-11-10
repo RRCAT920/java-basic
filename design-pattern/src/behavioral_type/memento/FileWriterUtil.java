@@ -34,8 +34,8 @@ public class FileWriterUtil {
     }
 
     private static class Memento {
-        private final String fileName;
-        private final StringBuilder content;
+        final String fileName;
+        final StringBuilder content;
 
         public Memento(String fileName, StringBuilder content) {
             this.fileName = fileName;
